@@ -20,10 +20,14 @@
  * expects the frequency value to be in kHz.
  */
 enum {
+/* devloz manipulation 7 start */
 	BCM21553_CORECLK_MHZ_156 = (156U * 1000),
 	BCM21553_CORECLK_MHZ_312 = (312U * 1000),
+	BCM21553_CORECLK_MHZ_468 = (468U * 1000),
 	BCM21553_CORECLK_MHZ_624 = (624U * 1000),
 	BCM21553_CORECLK_MHZ_832 = (832U * 1000),
+	BCM21553_CORECLK_MHZ_936 = (936U * 1000),
+/* devloz manipulation 7 start */
 };
 
 struct bcm21553_cpufreq_gov_plat {
@@ -31,6 +35,8 @@ struct bcm21553_cpufreq_gov_plat {
 	unsigned int freq_fast;
 	unsigned int freq_normal;
 	unsigned int freq_slow;
+	unsigned int freq_slower;
+	unsigned int freq_slowest;
 };
 
 /* helper for cpufreq_bcm_client_get */

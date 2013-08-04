@@ -1,9 +1,8 @@
 #!/bin/bash
 
-#export PATH=$PATH:$PWD/host/usr/bin
-export CROSS_COMPILE=arm-linux-gnueabi-
-export CC=arm-linux-gnueabi-gcc
-export CXX=arm-linux-gnueabi-g++
+export CROSS_COMPILE="$HOME"/arm-2009q3/bin/arm-none-eabi-
+export CC="$CROSS_COMPILE"gcc
+export CXX="$CROSS_COMPILE"g++
 export ARCH=arm
 
 cd common && make clean && make mrproper && make distclean && touch ../clear

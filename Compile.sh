@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export CROSS_COMPILE=/usr/bin/arm-linux-gnueabi-
+export CROSS_COMPILE="$HOME"/arm-2009q3/bin/arm-none-eabi-
 export CC="$CROSS_COMPILE"gcc
 export CXX="$CROSS_COMPILE"g++
 export ARCH=arm

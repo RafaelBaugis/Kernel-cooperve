@@ -3,7 +3,7 @@
 #########################################
 ### select favorite values zRAM Size. ###
 #########################################
-export size="72"        #This value is in MB
+export size="48"        #This value is in MB
 
 
 #################################
@@ -17,4 +17,4 @@ insmod /system/lib/modules/zram.ko
 echo $(($size*1024*1024)) > /sys/block/zram0/disksize
 
 mkswap /dev/block/zram0
-swapon /dev/block/zram0
+swapon -p 100 /dev/block/zram0
