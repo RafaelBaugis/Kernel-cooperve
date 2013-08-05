@@ -6,7 +6,7 @@ Kernel for Galaxy Ace-i based on Rafael.Baugis (bieltv3 actually) kernel sources
 Minor changes:
 
 Frequencies:
-- 936 - (1.30)
+- 936 - (1.30V)
 - 832 - (1.28V)
 - 624 - (1.26V)
 - 468 - (1.22V)
