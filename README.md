@@ -6,15 +6,15 @@ Kernel for Galaxy Ace-i based on Rafael.Baugis (bieltv3 actually) kernel sources
 Minor changes:
 
 Frequencies:
-- 936 - (1.30V)
-- 832 - (1.28V)
-- 624 - (1.26V)
+- 936 - (1.28V)
+- 832 - (1.26V)
+- 624 - (1.24V)
 - 468 - (1.22V)
 - 312 - (1.20V)
 - 208 - (1.17V)
 
 Governors:
-- smoothass
+- smoothass (don't work, activates 'performance'.  I don't know why)
 - ondemandx
 - lagfree
 - conservative
