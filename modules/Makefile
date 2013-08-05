@@ -39,4 +39,3 @@ endif
 obj-$(CONFIG_BRCM_HEADSET) += ../modules/drivers/sound/brcm/headset/
 #cntin
 obj-$(CONFIG_BRCM_CNTIN) += ../modules/drivers/gps/brcm/
-

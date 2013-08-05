@@ -596,7 +596,7 @@ int bcm21553_arm11_set_rate(struct clk *clk, unsigned long val)
 	u32 arm11_freq[6];
 	u32 apps_pll_freq = bcm21553_apps_pll_get_rate();
 
-	arm11_freq[0] = (apps_pll_freq*2)/16;	/* 156 MHz - SLOWEST */
+	arm11_freq[0] = (apps_pll_freq*2)/12;	/* 208 MHz - SLOWEST */
 	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER */
 	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOW */
 	arm11_freq[3] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */
@@ -644,7 +644,7 @@ long bcm21553_arm11_round_rate(struct clk *clk, unsigned long desired_val)
 	u32 arm11_freq[6];
 	u32 apps_pll_freq = bcm21553_apps_pll_get_rate();
 
-	arm11_freq[0] = (apps_pll_freq*2)/16;	/* 156 MHz - SLOWEST */
+	arm11_freq[0] = (apps_pll_freq*2)/12;	/* 208 MHz - SLOWEST */
 	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER */
 	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOW */
 	arm11_freq[3] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */

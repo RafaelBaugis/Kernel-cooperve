@@ -549,7 +549,7 @@ struct platform_device bcm215xx_lcdc_device = {
 };
 #endif
 /* devloz manipulation3 start */
-#define BCM_CORE_CLK_SLOWEST	BCM21553_CORECLK_MHZ_156
+#define BCM_CORE_CLK_SLOWEST	BCM21553_CORECLK_MHZ_208
 #define BCM_CORE_CLK_SLOWER	BCM21553_CORECLK_MHZ_312
 #define BCM_CORE_CLK_SLOW	BCM21553_CORECLK_MHZ_468
 #define BCM_CORE_CLK_NORMAL	BCM21553_CORECLK_MHZ_624
@@ -575,7 +575,7 @@ enum {
 /* Voltage-Frequency mapping for BCM21553 CPU0 */
 static struct bcm_freq_tbl bcm215xx_cpu0_freq_tbl[] = {
 /* devloz manipulation4 start */
-	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1160000),
+	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1170000),
 	FTBL_INIT(BCM_CORE_CLK_SLOWER / 1000, 1200000),
 	FTBL_INIT(BCM_CORE_CLK_SLOW / 1000, 1220000),
 	FTBL_INIT(BCM_CORE_CLK_NORMAL / 1000, 1240000),
@@ -639,9 +639,9 @@ struct platform_device bcm21553_cpufreq_gov = {
  *********************************************************************/
 /* devloz manipulation5 start */
 
-#define NM2_FF_VOLTAGE_SLOWEST	1140000
-#define NM2_TT_VOLTAGE_SLOWEST	1160000
-#define NM2_SS_VOLTAGE_SLOWEST	1200000
+#define NM2_FF_VOLTAGE_SLOWEST	1150000
+#define NM2_TT_VOLTAGE_SLOWEST	1170000
+#define NM2_SS_VOLTAGE_SLOWEST	1210000
 
 #define NM2_FF_VOLTAGE_SLOWER	1160000
 #define NM2_TT_VOLTAGE_SLOWER	1200000
@@ -760,7 +760,7 @@ static void bcm215xx_avs_notify(int silicon_type)
 	{
 /* devloz manipulation6 start */
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWEST_MODE].cpu_voltage =
-			1160000;
+			1170000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWER_MODE].cpu_voltage =
 			1200000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOW_MODE].cpu_voltage =
