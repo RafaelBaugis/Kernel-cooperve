@@ -51,6 +51,7 @@ struct silicon_type_info
 	int nm2_normal_voltage;
 	int nm2_slow_voltage;
 	int nm2_slower_voltage;
+	int nm2_slower2_voltage;
 	int nm2_slowest_voltage;
 };
 

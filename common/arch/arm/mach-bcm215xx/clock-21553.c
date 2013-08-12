@@ -582,7 +582,7 @@ unsigned long bcm21553_arm11_get_rate(struct clk *clk)
 
 	/* We assume that APPS PLL is active
 	& mode value less than 7 is not supported*/
-	if(mode <= 0x0B)
+	if(mode <= 0x0A)
 		return clk_armahb_reg_to_arm11_freq_mapping[mode];
 
 	apps_pll_freq = bcm21553_apps_pll_get_rate();
@@ -593,39 +593,44 @@ int bcm21553_arm11_set_rate(struct clk *clk, unsigned long val)
 {
 	u32 mode;
 /* devloz manipulation1 start */
-	u32 arm11_freq[6];
+	u32 arm11_freq[7];
 	u32 apps_pll_freq = bcm21553_apps_pll_get_rate();
 
 	arm11_freq[0] = (apps_pll_freq*2)/12;	/* 208 MHz - SLOWEST */
-	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER */
-	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOW */
-	arm11_freq[3] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */
-	arm11_freq[4] = (apps_pll_freq*2)/3;	/* 832 MHz - FAST */
-	arm11_freq[5] = (apps_pll_freq*3)/4;	/* 936 MHz - TURBO */
+	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER2 */
+	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOWER */
+	arm11_freq[3] = FREQ_MHZ(534);		/* 534 MHz - SLOW */
+	arm11_freq[4] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */
+	arm11_freq[5] = FREQ_MHZ(748);		/* 748 MHz - FAST */
+	arm11_freq[6] = (apps_pll_freq*2)/3;	/* 832 MHz - TURBO */
 /* devloz manipulation1 end */
 
 /* devloz manipulation2 start */
 	if (val == arm11_freq[0])
 	{
-		mode = 0x0A;
+		mode = 0x09;
 	}
 	else if (val == arm11_freq[1])
 	{
-		mode = 0x0B;
+		mode = 0x0A;
 	}
 	else if (val == arm11_freq[2])
 	{
-		mode = 0x0C;
+		mode = 0x0B;
 	}
 	else if (val == arm11_freq[3])
 	{
-		mode = 0x0D;
+		mode = 0x0C;
 	}
 	else if (val == arm11_freq[4])
 	{
-		mode = 0x0E;
+		mode = 0x0D;
 	}
 	else if (val == arm11_freq[5])
+	{
+		mode = 0x0E;
+	}
+	else if (val == arm11_freq[6])
 	{
 		mode = 0x0F;
 	}
@@ -641,19 +646,20 @@ int bcm21553_arm11_set_rate(struct clk *clk, unsigned long val)
 long bcm21553_arm11_round_rate(struct clk *clk, unsigned long desired_val)
 {
 /* devloz manipulation3 start */
-	u32 arm11_freq[6];
+	u32 arm11_freq[7];
 	u32 apps_pll_freq = bcm21553_apps_pll_get_rate();
 
 	arm11_freq[0] = (apps_pll_freq*2)/12;	/* 208 MHz - SLOWEST */
-	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER */
-	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOW */
-	arm11_freq[3] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */
-	arm11_freq[4] = (apps_pll_freq*2)/3;	/* 832 MHz - FAST */
-	arm11_freq[5] = (apps_pll_freq*3)/4;	/* 936 MHz - TURBO */
+	arm11_freq[1] = (apps_pll_freq*2)/8;	/* 312 MHz - SLOWER2 */
+	arm11_freq[2] = (apps_pll_freq*3)/8;	/* 468 MHz - SLOWER */
+	arm11_freq[3] = FREQ_MHZ(534);		/* 534 MHz - SLOW */
+	arm11_freq[4] = (apps_pll_freq*2)/4;	/* 624 MHz - NORMAL */
+	arm11_freq[5] = FREQ_MHZ(748);		/* 748 MHz - FAST */
+	arm11_freq[6] = (apps_pll_freq*2)/3;	/* 832 MHz - TURBO */
 
 	return (long)bcm21553_generic_round_rate(desired_val,
 						 arm11_freq,
-						 6);
+						 7);
 /* devloz manipulation3 end */
 }
 
@@ -663,7 +669,7 @@ unsigned long bcm21553_ahb_get_rate(struct clk *clk)
 	u32 mode = 0, ahb;
 	u32 apps_pll_freq = 0;
 	mode = readl(ADDR_CLKPWR_CLK_ARMAHB_MODE) & 0x0F;
-	if(mode < 0x0B)
+	if(mode < 0x0A)
 		ahb = clk_armahb_reg_to_ahb_freq_mapping[mode];
 	else
 	{
@@ -681,7 +687,7 @@ unsigned long bcm21553_ahb_fast_get_rate(struct clk *clk)
 	u32 apps_pll_freq = 0;
 	mode = readl(ADDR_CLKPWR_CLK_ARMAHB_MODE) & 0x0F;
 
-	if(mode < 0x0B)
+	if(mode < 0x0A)
 		ahb_fast = clk_armahb_reg_to_ahb_fast_freq_mapping[mode];
 	else
 	{
@@ -999,7 +1005,7 @@ unsigned long bcm21553_sdram_get_rate(struct clk *clk)
 	if (sdram_mode & CLK_SDRAM_SYC_MODE)
 	{
 		mode = readl(ADDR_CLKPWR_CLK_ARMAHB_MODE) & 0x0F;
-		if(mode < 0x0B)
+		if(mode < 0x0A)
 			sdram_clk_speed = clk_armahb_reg_to_ahb_fast_freq_mapping[mode];
 		else
 			sdram_clk_speed = apps_pll_freq/6;
@@ -1493,7 +1499,7 @@ int bcm21553_v3d_power_enable(struct clk *clk)
 	unsigned long flags;
 	u32 ahb_mode;
 	int i;
-	/* We need to switch to 312Mhz (mode = 0x0B) before enabling
+	/* We need to switch to 312Mhz (mode = 0x0A) before enabling
 	 * V3D - WORKAROUND for V3D bug
 	 */
 	raw_local_irq_save(flags);
@@ -1503,10 +1509,10 @@ int bcm21553_v3d_power_enable(struct clk *clk)
 	/*Enable AHB request*/
 	//writel(0x01, ADDR_SYSCFG_V3D_AHB_CLK_EN);
 
-	/*Save ahb mode and set ahb mode to 0x0B*/
+	/*Save ahb mode and set ahb mode to 0x0A*/
 	ahb_mode = readl(ADDR_CLKPWR_CLK_ARMAHB_MODE) & 0x0F;
-	//writel(0x0B, ADDR_CLKPWR_CLK_ARMAHB_MODE);
-	bcm215xx_set_armahb_mode(0x0B);
+	//writel(0x0A, ADDR_CLKPWR_CLK_ARMAHB_MODE);
+	bcm215xx_set_armahb_mode(0x0A);
 	udelay(100);
 
 	/* Write 0 bit 0 to POWER ON V3D island */
@@ -1911,8 +1917,8 @@ brcm_clk_proc_read(char *page, char **start,
 	apps_pll_freq /= FREQ_MHZ(1);
 
 	/* We assume that APPS PLL is active
-	& mode value less than 0x0B is not supported*/
-	if(mode <= 0x0B)
+	& mode value less than 0x0A is not supported*/
+	if(mode <= 0x0A)
 	{
 		arm11 = clk_armahb_reg_to_arm11_freq_mapping[mode]/FREQ_MHZ(1);
 		cp_clk = clk_armahb_reg_to_cp_freq_mapping[mode]/FREQ_MHZ(1);

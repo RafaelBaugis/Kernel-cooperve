@@ -29,7 +29,7 @@ Governors:
 - and... of course bcm21553 epic governor!
 
 I/O schedulers:
-- noop (default)
+- noop
 - deadline
 - cfq
 - vr
