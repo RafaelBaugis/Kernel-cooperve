@@ -2,7 +2,7 @@ VERSION = 2
 PATCHLEVEL = 6
 SUBLEVEL = 35
 EXTRAVERSION = .7-1
-NAME = rafael
+NAME = devloz
 
 BRCM_MODULES := ../modules
 
