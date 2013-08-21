@@ -26,6 +26,7 @@ Governors:
 - Lionheart
 - smartassV2 (default)
 - performance
+- zzmoove
 - and... of course bcm21553 epic governor!
 
 I/O schedulers:
