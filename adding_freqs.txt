@@ -1,9 +1,0 @@
-Files used to add freqs in bcm-21553:
-
-bcm-215xx/clock-21553.c
------
-bcm-215xx/device.c
------
-bcm-215xx/include/mach/bcm21553_cpufreq_gov.h
------
-plat-bcmap/include/plat/bcm_avs.h
