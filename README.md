@@ -3,16 +3,17 @@ Ace-I-Kernel
 
 Kernel for Galaxy Ace-i based on Rafael.Baugis (bieltv3 actually) kernel sources.
 
-Minor changes:
+Features:
+- Kernel Samepage Merging (KSM)
 
 Frequencies:
-- 832 (1.27V)
-- 748 (1.26V)
-- 624 (1.24V)
-- 532 (1.23V)
-- 468 (1.22V)
-- 312 (1.20V)
-- 208 (1.17V)
+- 832 (1.29V)
+- 748 (1.27V)
+- 624 (1.25V)
+- 532 (1.24V)
+- 468 (1.23V)
+- 312 (1.21V)
+- 208 (1.18V)
 
 Governors:
 - ondemandx
@@ -36,8 +37,6 @@ I/O schedulers:
 - vr
 - sio
 - bfq
-
-and some changes.
 
 Credits:
 - Rafael.Baugis for kernel.
