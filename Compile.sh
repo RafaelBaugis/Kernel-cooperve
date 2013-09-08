@@ -10,9 +10,8 @@ echo "hit <Enter> to continue or <Ctrl + C> to cancel." && sleep 1 && read
 
 cd common
 
-make distclean && make bcm21553_cooperve_defconfig && make xconfig
+make distclean && make bcm21553_cooperve_defconfig
 
 echo "Ready to compile? Hit <Enter> to Continue or <Ctrl>+<C> to Cancel!";
 sleep 1 && read
-echo $(date +%Y%m%d%H%M) > .version
 make -j`grep processor /proc/cpuinfo | wc -l`
