@@ -5,7 +5,10 @@ export CC="$CROSS_COMPILE"gcc
 export CXX="$CROSS_COMPILE"g++
 export ARCH=arm
 
-cd common && make clean && make mrproper && make distclean && touch ../clear
+cd ./common
+cp ./.version ../.version
+make clean && make mrproper && make distclean && touch ../clear
+mv ../.version ./.version
 cd ..
 if [ -f clear ]; then
 	rm clear
