@@ -5,6 +5,7 @@ Kernel for Galaxy Ace-i based on Rafael.Baugis (bieltv3 actually) kernel sources
 
 Features:
 - Kernel Samepage Merging (KSM)
+- Busybox 1.21.1 (installed in /sbin - for recovery).
 
 Frequencies:
 - 832 (1.29V)
@@ -31,10 +32,10 @@ Governors:
 - and... of course bcm21553 epic governor!
 
 I/O schedulers:
-- noop (default)
+- noop
 - deadline
 - cfq
-- vr
+- vr (default)
 - sio
 - bfq
 
