@@ -126,13 +126,6 @@ config CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
 	  governor. If unsure have a look at the help section of the
 	  driver. Fallback governor will be the performance governor.
 
-config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
-	bool "zzmoove"
-	select CPU_FREQ_GOV_ZZMOOVE
-	select CPU_FREQ_GOV_PERFORMANCE
-	help
-	  Conservative based governor. Version 0.7.
-
 config CPU_FREQ_DEFAULT_GOV_BCM21553
 	bool "bcm21553"
 	select CPU_FREQ_GOV_BCM21553
@@ -300,29 +293,6 @@ config CPU_FREQ_GOV_CONSERVATIVE_INPUT
 	bool "Ramp up CPU frequency on input events"
 	default y
 	depends on CPU_FREQ_GOV_CONSERVATIVE
-	help
-	  Enable installation of an input event handler which will ramp up the
-	  CPU to max frequency when an input event is received.
-
-	  If in doubt, say N.
-
-config CPU_FREQ_GOV_ZZMOOVE
-	tristate "'ZZMoove' cpufreq governor"
-	depends on CPU_FREQ
-	help
-	  'zzmoove' - conservative based governor. Version 0.7.
-
-	  To compile this driver as a module, choose M here: the
-	  module will be called cpufreq_zzmoove.
-
-	  For details, take a look at linux/Documentation/cpu-freq.
-
-	  If in doubt, say N.
-
-config CPU_FREQ_GOV_ZZMOOVE_INPUT
-	bool "Ramp up CPU frequency on input events"
-	default y
-	depends on CPU_FREQ_GOV_ZZMOOVE
 	help
 	  Enable installation of an input event handler which will ramp up the
 	  CPU to max frequency when an input event is received.
