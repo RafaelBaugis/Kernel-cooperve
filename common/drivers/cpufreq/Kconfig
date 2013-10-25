@@ -140,13 +140,6 @@ config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
 	  loading your cpufreq low-level hardware driver, using the
 	  'interactiveX' governor for latency-sensitive workloads.
 
-config CPU_FREQ_DEFAULT_GOV_SMOOTHASS
- 	bool "smoothass"
- 	select CPU_FREQ_GOV_SMOOTHASS
- 	select CPU_FREQ_GOV_PERFORMANCE
- 	help
- 	  Use the CPUFreq governor 'smoothass' as default.
-
 config CPU_FREQ_DEFAULT_GOV_BRAZILIANWAX
 	bool "brazilianwax"
 	select CPU_FREQ_GOV_BRAZILIANWAX
@@ -260,14 +253,6 @@ config CPU_FREQ_GOV_BRAZILIANWAX
 	depends on CPU_FREQ
 	help
 	  'brazilianwax' - a "slightly more agressive smart" optimized governor!
-
-config CPU_FREQ_GOV_SMOOTHASS
-	tristate "'smoothass' cpufreq governor"
-	depends on CPU_FREQ
-	help
-	smoothass' - a "slightly more agressive smartass" governor!
- 	
-	If in doubt, say N.
 
 config CPU_FREQ_MIN_TICKS
 	int "Ticks between governor polling interval."
