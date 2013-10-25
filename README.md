@@ -17,18 +17,16 @@ Frequencies:
 - 208 (1.18V)
 
 Governors:
-- ondemandx
-- lagfree
-- conservative
-- interactive
-- brazilianwax
-- interactiveX
-- ondemand
-- powersave
-- Lionheart
-- smartassV2 (default)
 - performance
-- zzmoove
+- smartassV2
+- Lionheart (default)
+- powersave
+- ondemand
+- ondemandX
+- interactive
+- interactiveX
+- brazilianwax
+- smoothass
 - and... of course bcm21553 epic governor!
 
 I/O schedulers:
@@ -40,7 +38,6 @@ I/O schedulers:
 - bfq
 
 Credits:
-- Rafael.Baugis for kernel.
+- Rafael.Baugis for base kernel.
 - Bieltv3 for giving source.
-- Prototype-U for brazilianwax and interactiveX governors.
 - and me :)
