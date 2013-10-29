@@ -577,13 +577,13 @@ enum {
 /* Voltage-Frequency mapping for BCM21553 CPU0 */
 static struct bcm_freq_tbl bcm215xx_cpu0_freq_tbl[] = {
 /* devloz manipulation4 start */
-	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1180000),
-	FTBL_INIT(BCM_CORE_CLK_SLOWER2 / 1000, 1210000),
-	FTBL_INIT(BCM_CORE_CLK_SLOWER / 1000, 1230000),
-	FTBL_INIT(BCM_CORE_CLK_SLOW / 1000, 1240000),
-	FTBL_INIT(BCM_CORE_CLK_NORMAL / 1000, 1250000),
-	FTBL_INIT(BCM_CORE_CLK_FAST / 1000, 1270000),
-	FTBL_INIT(BCM_CORE_CLK_TURBO / 1000, 1290000),
+	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1190000),
+	FTBL_INIT(BCM_CORE_CLK_SLOWER2 / 1000, 1220000),
+	FTBL_INIT(BCM_CORE_CLK_SLOWER / 1000, 1240000),
+	FTBL_INIT(BCM_CORE_CLK_SLOW / 1000, 1260000),
+	FTBL_INIT(BCM_CORE_CLK_NORMAL / 1000, 1280000),
+	FTBL_INIT(BCM_CORE_CLK_FAST / 1000, 1300000),
+	FTBL_INIT(BCM_CORE_CLK_TURBO / 1000, 1340000),
 /* devloz manipulation4 end */
 };
 /* BCM21553 CPU info */
@@ -643,33 +643,17 @@ struct platform_device bcm21553_cpufreq_gov = {
  *********************************************************************/
 /* devloz manipulation5 start */
 
-#define NM2_FF_VOLTAGE_SLOWEST	1160000
-#define NM2_TT_VOLTAGE_SLOWEST	1180000
-#define NM2_SS_VOLTAGE_SLOWEST	1220000
+#define NM2_FF_VOLTAGE_NORMAL	1180000
+#define NM2_TT_VOLTAGE_NORMAL	1200000
+#define NM2_SS_VOLTAGE_NORMAL	1220000
 
-#define NM2_FF_VOLTAGE_SLOWER2	1170000
-#define NM2_TT_VOLTAGE_SLOWER2	1210000
-#define NM2_SS_VOLTAGE_SLOWER2	1250000
+#define NM2_FF_VOLTAGE_FAST	1260000
+#define NM2_TT_VOLTAGE_FAST	1280000
+#define NM2_SS_VOLTAGE_FAST	1300000
 
-#define NM2_FF_VOLTAGE_SLOWER	1190000
-#define NM2_TT_VOLTAGE_SLOWER	1230000
-#define NM2_SS_VOLTAGE_SLOWER	1260000
-
-#define NM2_FF_VOLTAGE_SLOW	1200000
-#define NM2_TT_VOLTAGE_SLOW	1240000
-#define NM2_SS_VOLTAGE_SLOW	1270000
-
-#define NM2_FF_VOLTAGE_NORMAL	1210000
-#define NM2_TT_VOLTAGE_NORMAL	1250000
-#define NM2_SS_VOLTAGE_NORMAL	1280000
-
-#define NM2_FF_VOLTAGE_FAST	1250000
-#define NM2_TT_VOLTAGE_FAST	1270000
-#define NM2_SS_VOLTAGE_FAST	1290000
-
-#define NM2_FF_VOLTAGE_TURBO	1270000
-#define NM2_TT_VOLTAGE_TURBO	1290000
-#define NM2_SS_VOLTAGE_TURBO	1310000
+#define NM2_FF_VOLTAGE_TURBO	1240000
+#define NM2_TT_VOLTAGE_TURBO	1300000
+#define NM2_SS_VOLTAGE_TURBO	1360000
 /* devloz manipulation5 end */
 #define NM_FF_VOLTAGE		1320000
 #define NM_TT_VOLTAGE		1340000
@@ -681,10 +665,6 @@ struct platform_device bcm21553_cpufreq_gov = {
 static struct silicon_type_info part_type_ss = {
 	.lpm_voltage = -1, /* Pass -1 if no update needed */
 	.nm_voltage = NM_SS_VOLTAGE,
-	.nm2_slowest_voltage = NM2_SS_VOLTAGE_SLOWEST,
-	.nm2_slower2_voltage = NM2_SS_VOLTAGE_SLOWER2,
-	.nm2_slower_voltage = NM2_SS_VOLTAGE_SLOWER,
-	.nm2_slow_voltage = NM2_SS_VOLTAGE_SLOW,
 	.nm2_normal_voltage = NM2_SS_VOLTAGE_NORMAL,
 	.nm2_fast_voltage = NM2_SS_VOLTAGE_FAST,
 	.nm2_turbo_voltage = NM2_SS_VOLTAGE_TURBO,
@@ -693,10 +673,6 @@ static struct silicon_type_info part_type_ss = {
 static struct silicon_type_info part_type_tt = {
 	.lpm_voltage = -1, /* Pass -1 if no update needed */
 	.nm_voltage = NM_TT_VOLTAGE,
-	.nm2_slowest_voltage = NM2_TT_VOLTAGE_SLOWEST,
-	.nm2_slower2_voltage = NM2_TT_VOLTAGE_SLOWER2,
-	.nm2_slower_voltage = NM2_TT_VOLTAGE_SLOWER,
-	.nm2_slow_voltage = NM2_TT_VOLTAGE_SLOW,
 	.nm2_normal_voltage = NM2_TT_VOLTAGE_NORMAL,
 	.nm2_fast_voltage = NM2_TT_VOLTAGE_FAST,
 	.nm2_turbo_voltage = NM2_TT_VOLTAGE_TURBO,
@@ -705,10 +681,6 @@ static struct silicon_type_info part_type_tt = {
 static struct silicon_type_info part_type_ff = {
 	.lpm_voltage = -1, /* Pass -1 if no update needed */
 	.nm_voltage = NM_FF_VOLTAGE,
-	.nm2_slowest_voltage = NM2_FF_VOLTAGE_SLOWEST,
-	.nm2_slower2_voltage = NM2_FF_VOLTAGE_SLOWER2,
-	.nm2_slower_voltage = NM2_FF_VOLTAGE_SLOWER,
-	.nm2_slow_voltage = NM2_FF_VOLTAGE_SLOW,
 	.nm2_normal_voltage = NM2_FF_VOLTAGE_NORMAL,
 	.nm2_fast_voltage = NM2_FF_VOLTAGE_FAST,
 	.nm2_turbo_voltage = NM2_FF_VOLTAGE_TURBO,
@@ -721,10 +693,6 @@ static struct silicon_type_info part_type_ff = {
  */
 static void bcm215xx_avs_notify(int silicon_type)
 {
-	int slowest;
-	int slower2;
-	int slower;
-	int slow;
 	int normal;
 	int fast;
 	int turbo;
@@ -734,40 +702,24 @@ static void bcm215xx_avs_notify(int silicon_type)
 	switch(silicon_type)
 	{
 	case SILICON_TYPE_SLOW:
-		slowest = part_type_ss.nm2_slowest_voltage;
-		slower2 = part_type_ss.nm2_slower2_voltage;
-		slower = part_type_ss.nm2_slower_voltage;
-		slow = part_type_ss.nm2_slow_voltage;
 		normal = part_type_ss.nm2_normal_voltage;
 		fast = part_type_ss.nm2_fast_voltage;
 		turbo = part_type_ss.nm2_turbo_voltage;
 		break;
 
 	case SILICON_TYPE_TYPICAL:
-		slowest = part_type_tt.nm2_slowest_voltage;
-		slower2 = part_type_tt.nm2_slower2_voltage;
-		slower = part_type_tt.nm2_slower_voltage;
-		slow = part_type_tt.nm2_slow_voltage;
 		normal = part_type_tt.nm2_normal_voltage;
 		fast = part_type_tt.nm2_fast_voltage;
 		turbo = part_type_tt.nm2_turbo_voltage;
 		break;
 
 	case SILICON_TYPE_FAST:
-		slowest = part_type_ff.nm2_slowest_voltage;
-		slower2 = part_type_ff.nm2_slower2_voltage;
-		slower = part_type_ff.nm2_slower_voltage;
-		slow = part_type_ff.nm2_slow_voltage;
 		normal = part_type_ff.nm2_normal_voltage;
 		fast = part_type_ff.nm2_fast_voltage;
 		turbo = part_type_ff.nm2_turbo_voltage;
 		break;
 
 	default:
-		slowest = part_type_ss.nm2_slowest_voltage;
-		slower2 = part_type_ss.nm2_slower2_voltage;
-		slower = part_type_ss.nm2_slower_voltage;
-		slow = part_type_ss.nm2_slow_voltage;
 		normal = part_type_ss.nm2_normal_voltage;
 		fast = part_type_ss.nm2_fast_voltage;
 		turbo = part_type_ss.nm2_turbo_voltage;
@@ -777,19 +729,19 @@ static void bcm215xx_avs_notify(int silicon_type)
 	{
 /* devloz manipulation6 start */
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWEST_MODE].cpu_voltage =
-			1180000;
+			1190000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWER2_MODE].cpu_voltage =
-			1210000;
+			1220000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWER_MODE].cpu_voltage =
-			1230000;
-		bcm215xx_cpu0_freq_tbl[BCM_SLOWER2_MODE].cpu_voltage =
 			1240000;
+		bcm215xx_cpu0_freq_tbl[BCM_SLOWER2_MODE].cpu_voltage =
+			1260000;
 		bcm215xx_cpu0_freq_tbl[BCM_NORMAL_MODE].cpu_voltage =
-			1250000;
+			1280000;
 		bcm215xx_cpu0_freq_tbl[BCM_FAST_MODE].cpu_voltage =
-			1270000;
+			1300000;
 		bcm215xx_cpu0_freq_tbl[BCM_TURBO_MODE].cpu_voltage =
-			1290000;
+			1340000;
 /* devloz manipulation3 end */
 	}
 
@@ -861,22 +813,6 @@ void __init update_avs_sysparm(void)
 	SYSPARM_VOLT("nm2_ff_voltage_normal", part_type_ff.nm2_normal_voltage);
 	SYSPARM_VOLT("nm2_tt_voltage_normal", part_type_tt.nm2_normal_voltage);
 	SYSPARM_VOLT("nm2_ss_voltage_normal", part_type_ss.nm2_normal_voltage);
-
-	SYSPARM_VOLT("nm2_ff_voltage_slow", part_type_ff.nm2_slow_voltage);
-	SYSPARM_VOLT("nm2_tt_voltage_slow", part_type_tt.nm2_slow_voltage);
-	SYSPARM_VOLT("nm2_ss_voltage_slow", part_type_ss.nm2_slow_voltage);
-
-	SYSPARM_VOLT("nm2_ff_voltage_slower", part_type_ff.nm2_slower_voltage);
-	SYSPARM_VOLT("nm2_tt_voltage_slower", part_type_tt.nm2_slower_voltage);
-	SYSPARM_VOLT("nm2_ss_voltage_slower", part_type_ss.nm2_slower_voltage);
-
-	SYSPARM_VOLT("nm2_ff_voltage_slower2", part_type_ff.nm2_slower2_voltage);
-	SYSPARM_VOLT("nm2_tt_voltage_slower2", part_type_tt.nm2_slower2_voltage);
-	SYSPARM_VOLT("nm2_ss_voltage_slower2", part_type_ss.nm2_slower2_voltage);
-
-	SYSPARM_VOLT("nm2_ff_voltage_slowest", part_type_ff.nm2_slowest_voltage);
-	SYSPARM_VOLT("nm2_tt_voltage_slowest", part_type_tt.nm2_slowest_voltage);
-	SYSPARM_VOLT("nm2_ss_voltage_slowest", part_type_ss.nm2_slowest_voltage);
 
 	SYSPARM_VOLT("nm_ff_voltage", part_type_ff.nm_voltage);
 	SYSPARM_VOLT("nm_tt_voltage", part_type_tt.nm_voltage);
