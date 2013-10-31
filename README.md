@@ -8,13 +8,13 @@ Features:
 - Busybox 1.21.1 (installed in /sbin - for recovery).
 
 Frequencies:
-- 832 (1.29V)
-- 748 (1.27V)
-- 624 (1.25V)
-- 532 (1.24V)
-- 468 (1.23V)
-- 312 (1.21V)
-- 208 (1.18V)
+- 832 (1.34V)
+- 748 (1.30V)
+- 624 (1.28V)
+- 532 (1.26V)
+- 468 (1.24V)
+- 312 (1.22V)
+- 208 (1.19V)
 
 Governors:
 - performance
@@ -26,7 +26,6 @@ Governors:
 - interactive
 - interactiveX
 - brazilianwax
-- smoothass
 - and... of course bcm21553 epic governor!
 
 I/O schedulers:

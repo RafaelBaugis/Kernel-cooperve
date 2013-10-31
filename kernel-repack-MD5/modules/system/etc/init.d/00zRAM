@@ -1,20 +1,21 @@
 #!/system/bin/sh
 
-#########################################
-### select favorite values zRAM Size. ###
-#########################################
-export size="48"        #This value is in MB
+# Setting zRAM size variable in MB:
+export size="64"
 
-
-#################################
-### WONT CHANGE VALUES BELLOW ###
-#################################
-
+# Installing LZO modules:
 insmod /system/lib/modules/lzo_compress.ko
 insmod /system/lib/modules/lzo_decompress.ko
+
+#Installing zRAM module:
 insmod /system/lib/modules/zram.ko
 
+# Setting zRAM size:
 echo $(($size*1024*1024)) > /sys/block/zram0/disksize
 
+# Setting swappiness:
+echo "40" > /proc/sys/vm/swappiness
+
+# Starting SWAP on zRAM device:
 mkswap /dev/block/zram0
 swapon -p 100 /dev/block/zram0

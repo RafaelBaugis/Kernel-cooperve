@@ -1,0 +1,2 @@
+0x00000000	erandom_get_random_bytes	~/Ace-I-Kernel/modules/frandom/frandom	EXPORT_SYMBOL
+

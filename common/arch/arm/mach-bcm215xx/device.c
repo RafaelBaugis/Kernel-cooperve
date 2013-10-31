@@ -643,17 +643,17 @@ struct platform_device bcm21553_cpufreq_gov = {
  *********************************************************************/
 /* devloz manipulation5 start */
 
-#define NM2_FF_VOLTAGE_NORMAL	1180000
-#define NM2_TT_VOLTAGE_NORMAL	1200000
-#define NM2_SS_VOLTAGE_NORMAL	1220000
+#define NM2_FF_VOLTAGE_NORMAL	1220000
+#define NM2_TT_VOLTAGE_NORMAL	1260000
+#define NM2_SS_VOLTAGE_NORMAL	1300000
 
-#define NM2_FF_VOLTAGE_FAST	1260000
+#define NM2_FF_VOLTAGE_FAST	1240000
 #define NM2_TT_VOLTAGE_FAST	1280000
-#define NM2_SS_VOLTAGE_FAST	1300000
+#define NM2_SS_VOLTAGE_FAST	1320000
 
-#define NM2_FF_VOLTAGE_TURBO	1240000
+#define NM2_FF_VOLTAGE_TURBO	1260000
 #define NM2_TT_VOLTAGE_TURBO	1300000
-#define NM2_SS_VOLTAGE_TURBO	1360000
+#define NM2_SS_VOLTAGE_TURBO	1340000
 /* devloz manipulation5 end */
 #define NM_FF_VOLTAGE		1320000
 #define NM_TT_VOLTAGE		1340000
