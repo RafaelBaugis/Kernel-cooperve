@@ -6,6 +6,10 @@ rm -Rf boot.img-ramdisk.cpio.*
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
+./04-creat-package-REWRITTEN.sh
+rm -Rf kernel/boot.img
+rm -Rf ramdisk
+rm -Rf boot.img-ramdisk.cpio.*
 ./04-creat-package-MODULES.sh
 echo "ALL DONE";
 

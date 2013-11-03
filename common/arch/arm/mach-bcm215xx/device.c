@@ -577,13 +577,13 @@ enum {
 /* Voltage-Frequency mapping for BCM21553 CPU0 */
 static struct bcm_freq_tbl bcm215xx_cpu0_freq_tbl[] = {
 /* devloz manipulation4 start */
-	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1190000),
+	FTBL_INIT(BCM_CORE_CLK_SLOWEST / 1000, 1200000),
 	FTBL_INIT(BCM_CORE_CLK_SLOWER2 / 1000, 1220000),
 	FTBL_INIT(BCM_CORE_CLK_SLOWER / 1000, 1240000),
 	FTBL_INIT(BCM_CORE_CLK_SLOW / 1000, 1260000),
 	FTBL_INIT(BCM_CORE_CLK_NORMAL / 1000, 1280000),
 	FTBL_INIT(BCM_CORE_CLK_FAST / 1000, 1300000),
-	FTBL_INIT(BCM_CORE_CLK_TURBO / 1000, 1340000),
+	FTBL_INIT(BCM_CORE_CLK_TURBO / 1000, 1320000),
 /* devloz manipulation4 end */
 };
 /* BCM21553 CPU info */
@@ -643,16 +643,16 @@ struct platform_device bcm21553_cpufreq_gov = {
  *********************************************************************/
 /* devloz manipulation5 start */
 
-#define NM2_FF_VOLTAGE_NORMAL	1220000
-#define NM2_TT_VOLTAGE_NORMAL	1260000
+#define NM2_FF_VOLTAGE_NORMAL	1260000
+#define NM2_TT_VOLTAGE_NORMAL	1280000
 #define NM2_SS_VOLTAGE_NORMAL	1300000
 
-#define NM2_FF_VOLTAGE_FAST	1240000
-#define NM2_TT_VOLTAGE_FAST	1280000
+#define NM2_FF_VOLTAGE_FAST	1280000
+#define NM2_TT_VOLTAGE_FAST	1300000
 #define NM2_SS_VOLTAGE_FAST	1320000
 
-#define NM2_FF_VOLTAGE_TURBO	1260000
-#define NM2_TT_VOLTAGE_TURBO	1300000
+#define NM2_FF_VOLTAGE_TURBO	1300000
+#define NM2_TT_VOLTAGE_TURBO	1320000
 #define NM2_SS_VOLTAGE_TURBO	1340000
 /* devloz manipulation5 end */
 #define NM_FF_VOLTAGE		1320000
@@ -729,7 +729,7 @@ static void bcm215xx_avs_notify(int silicon_type)
 	{
 /* devloz manipulation6 start */
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWEST_MODE].cpu_voltage =
-			1190000;
+			1200000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWER2_MODE].cpu_voltage =
 			1220000;
 		bcm215xx_cpu0_freq_tbl[BCM_SLOWER_MODE].cpu_voltage =
@@ -741,7 +741,7 @@ static void bcm215xx_avs_notify(int silicon_type)
 		bcm215xx_cpu0_freq_tbl[BCM_FAST_MODE].cpu_voltage =
 			1300000;
 		bcm215xx_cpu0_freq_tbl[BCM_TURBO_MODE].cpu_voltage =
-			1340000;
+			1320000;
 /* devloz manipulation3 end */
 	}
 

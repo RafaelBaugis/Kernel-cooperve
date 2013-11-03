@@ -1,0 +1,93 @@
+on early-init
+    start ueventd
+
+on init
+    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /sbin/lib:/vendor/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+
+    #symlink /system/etc /etc
+
+    mkdir /sdcard
+    mkdir /sd-ext
+    mkdir /system
+    mkdir /etc
+    mkdir /data
+    mkdir /cache
+    mkdir /tmp
+    mkdir /dbdata
+    mkdir /mnt 0775 root root
+    #mount /tmp /tmp tmpfs
+
+    exec /sbin/busybox --install -s /sbin
+
+    exec /sbin/busybox cp /res/recovery.fstab /etc/recovery.fstab
+    exec /sbin/busybox cp /res/fstab /etc/fstab
+    exec /sbin/busybox cp /res/mtab /etc/mtab
+
+on early-fs
+    # rfs drivers
+    insmod /lib/modules/fsr.ko
+    insmod /lib/modules/fsr_stl.ko
+    insmod /lib/modules/rfs_glue.ko
+    insmod /lib/modules/rfs_fat.ko
+    insmod /lib/modules/sec_param.ko
+
+on fs
+    mount tmpfs tmpfs /tmp
+
+    exec /sbin/tune2fs -O ^has_journal /dev/stl9
+    exec /sbin/tune2fs -O ^has_journal /dev/stl10
+    exec /sbin/tune2fs -O ^has_journal /dev/stl11
+
+    exec /sbin/busybox sleep 1
+
+    exec /sbin/e2fsck -p /dev/stl9
+    exec /sbin/e2fsck -p /dev/stl10
+    exec /sbin/e2fsck -p /dev/stl11
+
+    exec /sbin/busybox sleep 1
+
+    mount ext4 /dev/stl9 /system
+    mount ext4 /dev/stl10 /cache nosuid nodev
+    mount ext4 /dev/stl11 /data nosuid nodev
+
+on post-fs
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+    write /proc/LinuStoreIII/fsbuild_check BUILDING
+
+on boot
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+    class_start default
+
+    exec /sbin/bmlunlock
+
+    exec /sbin/recoverytweak.sh
+
+service ueventd /sbin/ueventd
+    critical
+
+service console /sbin/sh
+    console
+
+service recovery /sbin/recovery
+
+service adbd /sbin/adbd recovery
+    disabled
+
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    stop adbd

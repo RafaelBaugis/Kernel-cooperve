@@ -8,13 +8,13 @@ Features:
 - Busybox 1.21.1 (installed in /sbin - for recovery).
 
 Frequencies:
-- 832 (1.34V)
+- 832 (1.32V)
 - 748 (1.30V)
 - 624 (1.28V)
 - 532 (1.26V)
 - 468 (1.24V)
 - 312 (1.22V)
-- 208 (1.19V)
+- 208 (1.20V)
 
 Governors:
 - performance
