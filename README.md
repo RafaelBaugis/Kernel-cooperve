@@ -1,4 +1,3 @@
-============
 Ace-I-Kernel
 ============
 
@@ -47,17 +46,12 @@ Credits:
 - Bieltv3 for his source.
 - and me :)
 
-=====================================
-HOW TO COMPILE
-=====================================
+Compiling:
+============
 1. Download Sourcery from "http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/" (ARM/EABI release).
 2. Unpack it to home directory (~/)
 3. Clone this github.
-4.
-cd Ace-I-Kernel
-./Compile.sh
-./Creat_Package.sh
+4. It seems logical.
 5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
-=====================================
+============
 Done!
-=====================================
