@@ -20,7 +20,7 @@ if [ -f boot.img-ramdisk.cpio.gz ] || [ -f boot.img-ramdisk.cpio.lzma ] || [ -f 
 	test boot.img-ramdisk.cpio.lzma && echo "RAMDISK in cpio.lzma	- Good!"; touch r-ok
 else
 	rm -Rf ramdisk
-	ln -s ramdisk_EXT4 ramdisk
+	ln -s ramdisk_OLD ramdisk
 	if [ -d ramdisk ]; then
 		echo "CREATING RAMDISK";
 		./03-compress-ramdisk.lzma.sh
@@ -66,14 +66,14 @@ if [ -f run.sh ] && [ -f md5 ]; then
 	rm ../kernel/boot.img ../boot.img ../*-boot.img.tar ../*-modules.zip ../*-boot.img.zip; clear; sleep 5
 	chmod +x run.sh mkbootimg && ./run.sh && rm run.sh md5
 	cd ..
-	tar -cvf EXT4-PDA-boot.img.tar boot.img && mv boot.img kernel/ && cd kernel && zip -r ../EXT4-boot.img.zip . ;
+	tar -cvf OLD-PDA-boot.img.tar boot.img && mv boot.img kernel/ && cd kernel && zip -r ../OLD-boot.img.zip . ;
 	cd ..
-	mv EXT4-boot.img.zip ../$(cat ../common/.version)-EXT4-boot.img.zip && echo "$(cat ../common/.version)-EXT4-boot.img.zip <-> READY"
-	mv EXT4-PDA-boot.img.tar ../$(cat ../common/.version)-EXT4-PDA-boot.img.tar && echo "$(cat ../common/.version)-EXT4-PDA-boot.img.tar <-> READY"
+	mv OLD-boot.img.zip ../$(cat ../common/.version)-OLD-boot.img.zip && echo "$(cat ../common/.version)-OLD-boot.img.zip <-> READY"
+	mv OLD-PDA-boot.img.tar ../$(cat ../common/.version)-OLD-PDA-boot.img.tar && echo "$(cat ../common/.version)-OLD-PDA-boot.img.tar <-> READY"
 else
 	echo "boot.img creation - Faill"; sleep 5; exit
 fi
 
-echo "EXT4 DONE";
+echo "OLD DONE";
 
 sleep 5

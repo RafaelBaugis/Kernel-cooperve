@@ -1,6 +1,7 @@
+Ace-I-Kernel Repack Tool
+============
 
-	Automatic kernel repack tool with MD5SUM
-	----------------------------------------
+Repack tool for Ace-I-Kernel with MD5-SUM support.
 
 01-split-boot.img.sh to split kernel and ramdisk.
 
