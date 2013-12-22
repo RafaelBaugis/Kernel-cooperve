@@ -24,6 +24,7 @@ on boot
     insmod /system/lib/modules/brcm-headsetsw.ko
 
 # Permissions for system server:
+
     chown system system /sys/class/backlight/aat1401-backlight/brightness
     chown system system /sys/module/bcm215xx_pm/parameters/debug
     chown radio system /dev/bcm_alsa_voip
@@ -33,6 +34,7 @@ on boot
     chown system system /sys/bcm/cache
     chown system system /dev/ttyGS0
     chown system system /dev/ttyS0
+    chown root root /dev/frandom
 
     chmod 0777 /dev/bcm_kril
     chmod 0777 /dev/bcm_vsp
@@ -41,6 +43,7 @@ on boot
     chmod 0666 /dev/v3d
     chmod 0777 /dev/camera
     chmod 0771 /dev/ttyGS0
+    chmod 0666 /dev/frandom
 
 
 # For ASE:

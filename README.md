@@ -16,6 +16,15 @@ Features:
 - IPTables full needed rules (something to fix).
 - zRAM + ramzswap support.
 - Swap support.
+- ClockworkMod Recovery 5.0.2.8 by Squadzone Rev3.
+- Frandom support.
+
+Partition table:
+- /system	EXT4	/dev/stl9
+- /cache	EXT4	/dev/stl10
+- /data		EXT4	/dev/stl11
+- /sdcard	VFAT	/dev/block/mmcblk0p1
+- /sd-ext	EXT3	/dev/block/mmcblk0p2
 
 Bugs:
 - SIM contacts reading (as everywhere).
@@ -67,6 +76,6 @@ Compiling:
 (ARM Processors/EABI Release).
 2. Unpack it to home directory (~/)
 3. Clone this github.
-4. It seems logical (always use Compile-clean for stock or Compile-CM-clean for CM7 [everytime it will produce three packages but only desired version will be right]. noclean for fast compiling [delete .o of modified files + built.in in modded folder).
+4. It seems logical (always use Compile-clean for stock or Compile-CM-clean for CM7 [everytime it will produce three packages but only desired version will be right], noclean for fast compiling [delete .o of modified files + built.in in modded folder).
 5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
 6. Done!

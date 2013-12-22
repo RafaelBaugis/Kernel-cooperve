@@ -1,0 +1,7 @@
+config FRANDOM_SUPPORT
+	tristate "FRANDOM: Fast pseudo-random number generator"
+        default n
+	help
+	  Say [*] to add FRANDOM support to the kernel. 
+          This speeds up the random generating of 10-50 times than
+          normal URANDOM.

@@ -37,6 +37,7 @@ on boot
     chown system system /sys/bcm/cache
     chown system system /dev/ttyGS0
     chown system system /dev/ttyS0
+    chown root root /dev/frandom
 
     chmod 0777 /dev/bcm_kril
     chmod 0777 /dev/bcm_vsp
@@ -45,6 +46,7 @@ on boot
     chmod 0666 /dev/v3d
     chmod 0777 /dev/camera
     chmod 0771 /dev/ttyGS0
+    chmod 0666 /dev/frandom
 
 # Permissions for camera flash (CM7 needs):
     chown system camera /sys/class/camera/camera/camflash
