@@ -1,0 +1,34 @@
+on boot
+    setprop ARGH ARGH
+    setprop net.eth0.dns1 10.0.2.3
+    setprop net.gprs.local-ip 10.0.2.15
+    setprop ro.radio.use-ppp no
+    setprop ro.build.product generic
+    setprop ro.product.device generic
+
+# Fake battery state:
+    setprop status.battery.state Slow
+    setprop status.battery.level 5
+    setprop status.battery.level_raw  50
+    setprop status.battery.level_scale 9
+
+# Disable unneeded daemons:
+    stop dund
+    stop akmd
+
+# Setup Wizard mode:
+    setprop ro.setupwizard.mode EMULATOR
+
+# Google location features:
+    setprop ro.com.google.locationfeatures 1
+
+service goldfish-setup /system/etc/init.goldfish.sh
+    oneshot
+
+service qemud /system/bin/qemud
+    socket qemud    stream 666
+    oneshot
+
+# Logcat with emulator detection -Q:
+service goldfish-logcat /system/bin/logcat -Q
+    oneshot

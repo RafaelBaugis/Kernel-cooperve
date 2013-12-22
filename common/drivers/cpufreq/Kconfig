@@ -81,6 +81,12 @@ config CPU_FREQ_DEFAULT_GOV_SMARTASS2
 	help
 	  Use the CPUFreq governor 'smartassV2' as default.
 
+config CPU_FREQ_DEFAULT_GOV_SMARTASSH3
+	bool "smartassH3"
+	select CPU_FREQ_GOV_SMARTASSH3
+	help
+		Use the CPUFreq governor 'SmartassH3' as default.
+
 config CPU_FREQ_DEFAULT_GOV_LIONHEART
        bool "lionheart"
        select CPU_FREQ_GOV_LIONHEART
@@ -109,7 +115,7 @@ config CPU_FREQ_DEFAULT_GOV_ONDEMAND
 	  driver. Fallback governor will be the performance governor.
 
 config CPU_FREQ_DEFAULT_GOV_ONDEMANDX
-       bool "ondemandx"
+       bool "ondemandX"
        select CPU_FREQ_GOV_ONDEMANDX
        select CPU_FREQ_GOV_PERFORMANCE
        help
@@ -176,6 +182,13 @@ config CPU_FREQ_GOV_SMARTASS2
 	  'smartassV2' - a "smart" optimized governor for the BCM21553!
 	
 	  If in doubt, say N.
+
+config CPU_FREQ_GOV_SMARTASSH3
+	tristate "'SmartassH3' cpufreq governor"
+	depends on CPU_FREQ
+	help
+		'SmartassH3' - a "smartassV2 with tweaks by H3ROS" governor.
+		If in doubt, say N.
 
 config CPU_FREQ_GOV_LIONHEART
        tristate "'Lionheart' cpufreq governor"
