@@ -6,7 +6,7 @@ Kernel for Galaxy Ace-i based on Rafael.Baugis (bieltv3 actually) kernel sources
 Features:
 - Init.d support.
 - EXT4 boot (no RFS).
-- Kernel Samepage Merging (KSM)
+- Kernel Samepage Merging (KSM).
 - Busybox 1.21.1 (installed in /sbin - for recovery and auto installer).
 - EXT4FS Cleancache support.
 - PROCFS autogroup scheduling support.
@@ -21,9 +21,9 @@ Bugs:
 - SIM contacts reading (as everywhere).
 - Adobe Flash Player (Working: https://www.mediafire.com/?7fkbal3s0bszdb9)
 
-Editions (only difference is ramdisk [look kernel-repack-MD5]):
-- OLD - Old ramdisk stands as backup. Some features not present or are OLD.
-- NEW - New ramdisk totally reworked. There are all changes (mainstream).
+Editions (only difference is ramdisk [look: kernel-repack-MD5]):
+- OLD - Old ramdisk, stands as backup. Some features not present or are OLD.
+- NEW - New ramdisk, totally reworked. There are all changes (mainstream).
 - CM7 - New ramdisk with CM7 support (BETA [still problems ie. Bluetooth]).
 
 Frequencies:
@@ -58,7 +58,7 @@ I/O schedulers:
 
 Credits:
 - Rafael.Baugis for base kernel.
-- Bieltv3/Astinj (bieltv3 dropped source for Astinj?) for his source.
+- Bieltv3/Astinj (bieltv3 dropped source for Astinj?) for GitHub source.
 - and me :)
 
 Compiling:
@@ -67,6 +67,6 @@ Compiling:
 (ARM Processors/EABI Release).
 2. Unpack it to home directory (~/)
 3. Clone this github.
-4. It seems logical.
+4. It seems logical (always use Compile-clean for stock or Compile-CM-clean for CM7 [everytime it will produce three packages but only desired version will be right]. noclean for fast compiling [delete .o of modified files + built.in in modded folder).
 5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
 6. Done!
