@@ -8,7 +8,6 @@ Features:
 - Busybox 1.21.1 (installed in /sbin - for recovery).
 - EXT4FS Cleancache support.
 - PROCFS autogroup scheduling support.
-- UHID backport from 3.8 kernel.
 - Reworked ramdisk.
 
 Frequencies:
