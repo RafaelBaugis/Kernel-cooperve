@@ -53,5 +53,4 @@ Compiling:
 3. Clone this github.
 4. It seems logical.
 5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
-============
-Done!
+6. Done!
