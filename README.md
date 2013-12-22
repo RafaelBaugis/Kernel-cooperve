@@ -1,3 +1,4 @@
+============
 Ace-I-Kernel
 ============
 
@@ -9,6 +10,7 @@ Features:
 - EXT4FS Cleancache support.
 - PROCFS autogroup scheduling support.
 - Reworked ramdisk.
+- Auto install su at boot (Version "1.86:SUPERSU")
 
 Frequencies:
 - 832 (1.32V)
@@ -44,3 +46,18 @@ Credits:
 - Rafael.Baugis for base kernel.
 - Bieltv3 for his source.
 - and me :)
+
+=====================================
+HOW TO COMPILE
+=====================================
+1. Download Sourcery from "http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/" (ARM/EABI release).
+2. Unpack it to home directory (~/)
+3. Clone this github.
+4.
+cd Ace-I-Kernel
+./Compile.sh
+./Creat_Package.sh
+5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
+=====================================
+Done!
+=====================================
