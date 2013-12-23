@@ -11,7 +11,7 @@ echo "hit <Enter> to continue or <Ctrl + C> to cancel." && sleep 1 && read
 
 cd ./common
 cp ./.version ../.version
-make distclean && make bcm21553_cooperve_defconfig
+make distclean && make stock_cooperve_defconfig
 mv ../.version ./.version
 
 echo "Ready to compile? Hit <Enter> to Continue or <Ctrl>+<C> to Cancel!";

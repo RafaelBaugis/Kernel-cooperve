@@ -1,4 +1,6 @@
 on early-init
+
+# Start uevent daemon:
     start ueventd
 
 on init
@@ -10,7 +12,7 @@ on init
     export ANDROID_DATA /data
     export EXTERNAL_STORAGE /sdcard
 
-# Create base mountpoints:
+# Create basic filesystem structure:
     mkdir /sdcard
     mkdir /sd-ext
     mkdir /system
@@ -21,15 +23,16 @@ on init
     mkdir /dbdata
     mkdir /mnt 0775 root root
 
-# Install busybox in /sbin:
+# Install busybox in /sbin for essential commands:
     exec /sbin/busybox --install -s /sbin
 
-# Copy File Sytem Table from ramdisk:
+# Copy File Sytem Tables from ramdisk:
     exec /sbin/cp /res/recovery.fstab /etc/recovery.fstab
     exec /sbin/cp /res/fstab /etc/fstab
     exec /sbin/cp /res/mtab /etc/mtab
 
 on early-fs
+
 # FSR modules:
     insmod /lib/modules/fsr.ko
     insmod /lib/modules/fsr_stl.ko
@@ -42,9 +45,11 @@ on early-fs
     insmod /lib/modules/sec_param.ko
 
 on fs
+
+# Mount /tmp:
     mount tmpfs tmpfs /tmp
 
-# Add jorunaling to partitions:
+# Disable journaling for partitions:
     exec /sbin/tune2fs -O ^has_journal /dev/stl9
     exec /sbin/tune2fs -O ^has_journal /dev/stl10
     exec /sbin/tune2fs -O ^has_journal /dev/stl11
@@ -64,6 +69,8 @@ on fs
     mount ext4 /dev/stl11 /data nosuid nodev
 
 on post-fs
+
+# Configure kernel:
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
@@ -74,24 +81,32 @@ on post-fs
     write /proc/LinuStoreIII/fsbuild_check BUILDING
 
 on boot
+
+# Configure network:
     ifup lo
     hostname localhost
     domainname localdomain
 
+# Start default services:
     class_start default
 
+# Unlock BML (for kernel flashing):
     exec /sbin/bmlunlock
 
     exec /sbin/recoverytweak.sh
 
+# uevent service daemon:
 service ueventd /sbin/ueventd
     critical
 
+# Console service:
 service console /sbin/sh
     console
 
+# Recovery service:
 service recovery /sbin/recovery
 
+# ADB service daemon:
 service adbd /sbin/adbd recovery
     disabled
 

@@ -10,7 +10,7 @@ ls -l $CROSS_COMPILE*
 echo "hit <Enter> to continue or <Ctrl + C> to cancel." && sleep 1 && read
 
 cd ./common
-make bcm21553_cooperve_defconfig
+make stock_cooperve_defconfig
 
 echo "Ready to compile? Hit <Enter> to Continue or <Ctrl>+<C> to Cancel!";
 sleep 1 && read

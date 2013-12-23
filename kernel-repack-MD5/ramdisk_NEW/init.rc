@@ -1,4 +1,6 @@
 on early-init
+
+# Start uevent daemon:
     start ueventd
 
 on init
@@ -23,7 +25,7 @@ loglevel 3
     mkdir /etc
     symlink /sys/kernel/debug /d
 
-# Copying File System Table from ramdisk:
+# Copying File System Tables from ramdisk:
     exec /sbin/busybox cp /res/recovery.fstab /etc/recovery.fstab
     exec /sbin/busybox cp /res/fstab /etc/fstab
     exec /sbin/busybox cp /res/mtab /etc/mtab
@@ -71,7 +73,7 @@ loglevel 3
     mkdir /mnt/obb 0700 root system
     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
 
-# Config kernel:
+# Configure kernel:
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
@@ -115,7 +117,6 @@ loglevel 3
     chmod 0770 /dev/stl13
     chmod 0770 /dev/stl14
     chmod 0770 /dev/stl15
-
     chmod 0770 /dev/bml9
     chmod 0770 /dev/bml10
     chmod 0770 /dev/bml11
@@ -123,24 +124,20 @@ loglevel 3
     chmod 0770 /dev/bml13
     chmod 0770 /dev/bml14
     chmod 0770 /dev/bml15
-    
-#    bml15 nv partition
     chown radio system /dev/bml15
 
 on fs
 
-# Add journal to partitions:
+# Disable journaling for partitions:
     exec /sbin/tune2fs -O ^has_journal /dev/stl9
     exec /sbin/tune2fs -O ^has_journal /dev/stl10
     exec /sbin/tune2fs -O ^has_journal /dev/stl11
-
     exec /sbin/busybox sleep 0.25
 
 # Check partitions for errors:
     exec /sbin/e2fsck -p /dev/stl9
     exec /sbin/e2fsck -p /dev/stl10
     exec /sbin/e2fsck -p /dev/stl11
-
     exec /sbin/busybox sleep 0.25
 
 # Mount partitions:
@@ -152,10 +149,9 @@ on fs
     exec /sbin/busybox rm -Rf /etc
     symlink /system/etc /etc
     exec /sbin/busybox sh /sbin/root_install.sh
-
     exec /sbin/busybox sleep 0.25
 
-# Remount /system ro:
+# Remount /system Read-Only:
     mount ext4 /dev/stl9 /system ro remount nodelalloc
 
 # Load J4FS module and mount .lfs:
@@ -170,11 +166,11 @@ on fs
 # /efs /cache /mnt/.lfs required:
     exec apply_sec_devenc_init
 
-# Permissions for /sbin/fat.format
+# Permissions for /sbin/fat.format:
     chown root root /sbin/fat.format
     chmod 750 /sbin/fat.format
 
-# Remount + permissions for /data again:
+# Remount + permissions for /data:
     mount ext4 /dev/stl11 /data remount nosuid nodev crypt nodelalloc
     chown system system /data
     chmod 0771 /data
@@ -186,7 +182,8 @@ on fs
     setprop keyguard.no_require_sim 1
 
 on post-fs
-# once everything is setup, no need to modify /
+
+# Remount / Read-Only:
     mount rootfs rootfs / ro remount
 
 # Permissions for /data:
@@ -198,18 +195,16 @@ on post-fs
     chown root log /data/dontpanic
     chmod 0750 /data/dontpanic
 
-# Collect apanic data, free resources and re-arm trigger:
+# Collect apanic data:
     copy /proc/apanic_console /data/dontpanic/apanic_console
     chown root log /data/dontpanic/apanic_console
     chmod 0640 /data/dontpanic/apanic_console
-
     copy /proc/apanic_threads /data/dontpanic/apanic_threads
     chown root log /data/dontpanic/apanic_threads
     chmod 0640 /data/dontpanic/apanic_threads
 
 # Copy CP_DUMP:
     copy /proc/cp_dump /data/dontpanic/cp_dump
-
     write /proc/apanic_console 1
     write /proc/cp_dump 1
 
@@ -222,7 +217,7 @@ on post-fs
     chown system cache /cache
     chmod 0770 /cache
 
-# Cache folder for bigger file than /cache partition:
+# Create /data/cache for files bigger than /cache:
     mkdir /data/cache
     chown system cache /data/cache
     chmod 0770 /data/cache
@@ -273,7 +268,7 @@ on post-fs
     chown radio radio /data/fota
     chmod 0775 /data/fota
 
-# ANR mode chage:
+# Create + permissions /data/anr:
     mkdir /data/anr 0775 system system 
     chmod 0775 /data/anr
 
@@ -298,16 +293,17 @@ on post-fs
     chown root root /cache/lost+found
     chmod 0770 /cache/lost+found
 
-# DRM:
+# Create + permissions /data/data/.drm:
     mkdir /data/data/.drm/ 0755
 
 on boot
-# Init basic network:
+
+# Configure network:
     ifup lo
     hostname localhost
     domainname localdomain
 
-# Allow priorities from 19 to -20
+# Allow priorities from 19 to -20:
     setrlimit 13 40 40
 
 # Samsung bootsound property:
@@ -371,7 +367,6 @@ on boot
     chown system system /sys/kernel/ipv4/tcp_rmem_def
     chown system system /sys/kernel/ipv4/tcp_rmem_max
     chown root radio /proc/cmdline
-
     chmod 0664 /sys/class/leds/button-backlight/brightness
     chmod 0660 /sys/power/state
     chmod 0660 /sys/power/wake_lock
@@ -463,18 +458,18 @@ on boot
     chown system input /sys/class/input/input0/proximity_avg
     chown system input /sys/class/input/input0/proximity_state
 
-#Accelerometer:
-    chown system input /sys/class/input/input3/enable
-    chown system input /sys/class/input/input3/delay
-    chown system input /sys/class/input/input3/wake
-
 # Geomagnetic:
     chown system input /sys/class/input/input1/enable
     chown system input /sys/class/input/input1/delay
     chown system input /sys/class/input/input1/wake
 
-# Geomagnetic_raw:
+# Compass:
     chown compass input /sys/class/input/input2/offsets
+
+# Accelerometer:
+    chown system input /sys/class/input/input3/enable
+    chown system input /sys/class/input/input3/delay
+    chown system input /sys/class/input/input3/wake
 
 # Orientation:
     chown system input /sys/class/input/input4/enable
@@ -483,11 +478,11 @@ on boot
 
 ## Sensor mounting direction.
 
-# Accelerometer:
-    write /sys/class/input/input3/position 3
-
 # Geomagnetic:
     write /sys/class/input/input1/position 0
+
+# Accelerometer:
+    write /sys/class/input/input3/position 3
 
 # Define TCP buffer sizes for various networks.
 #   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax:
@@ -503,29 +498,29 @@ on boot
     setprop service.brcm.bt.btld_pid 0
     setprop service.brcm.bt.hcid_active 0
     setprop service.brcm.bt.is_sta 0
-    setprop service.brcm.bt.srv_active 0 
+    setprop service.brcm.bt.srv_active 0
 
 # Define Broadcom GPS properties:
     setprop gps.fd.block "false"
 
     start sysinit
 
+# Start default services:
     class_start default
 
-## Daemon processes to be run by init.
-
+# uevent service daemon:
 service ueventd /sbin/ueventd
     critical
 
 on property:ro.secure=0
     start console
 
-# adbd is controlled by the persist.service.adb.enable system property:
+# ADB service daemon
 service adbd /sbin/adbd
     group shell log
     disabled
 
-# adbd on at boot in emulator:
+# Start ADB service daemon when in emulator:
 on property:ro.kernel.qemu=1
     start adbd
 
@@ -575,6 +570,7 @@ service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-sys
     onrestart restart media
     onrestart restart netd
 
+# Init.d support:
 service sysinit /sbin/busybox run-parts /system/etc/init.d/
     disabled
     oneshot
@@ -637,7 +633,7 @@ on property:encryption.bootmode=remount
     stop immvibed
     stop zygote
 
-####### data check 
+# Mount + permissions for /data again:
     mount ext4 /dev/stl11 /data nosuid nodev usedm nodelalloc
     chown system system /data
     chmod 0771 /data

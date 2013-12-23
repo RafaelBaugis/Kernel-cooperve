@@ -1,12 +1,10 @@
 on post-fs
 
 # Permissions for system server and daemons (accelerometer & magnetic & proximity):
-
     chown root system /dev/proximity
     chown root system /dev/i2c-6
     chown system system /sys/class/input/input0/enable
     chown system system /sys/class/input/input0/poll_delay
-
     chmod 0660 /dev/proximity
     chmod 0660 /dev/i2c-6
     chmod 0660 /sys/class/input/input0/enable
@@ -24,7 +22,6 @@ on boot
     insmod /system/lib/modules/brcm-headsetsw.ko
 
 # Permissions for system server:
-
     chown system system /sys/class/backlight/aat1401-backlight/brightness
     chown system system /sys/module/bcm215xx_pm/parameters/debug
     chown radio system /dev/bcm_alsa_voip
@@ -34,8 +31,7 @@ on boot
     chown system system /sys/bcm/cache
     chown system system /dev/ttyGS0
     chown system system /dev/ttyS0
-    chown root root /dev/frandom
-
+    chown root root /dev/frandom=
     chmod 0777 /dev/bcm_kril
     chmod 0777 /dev/bcm_vsp
     chmod 0660 /dev/bcm_atc
@@ -51,19 +47,16 @@ on boot
     mkdir /data/brcm/ase
     mkdir /data/brcm/ase/extras
     mkdir /data/brcm/ase/scripts
-
     chmod 0775 /data/brcm
     chmod 0775 /data/brcm/ase
     chmod 0775 /data/brcm/ase/extras
     chmod 0775 /data/brcm/ase/scripts
-
     copy /system/etc/adb.sh /data/brcm/ase/scripts/adb.sh
     copy /system/etc/rndis.sh /data/brcm/ase/scripts/rndis.sh
     copy /system/etc/logcfg.sh /data/brcm/ase/scripts/logcfg.sh
     copy /system/etc/modem.sh /data/brcm/ase/scripts/modem.sh
     copy /system/etc/atmode.sh /data/brcm/ase/scripts/atmode.sh
     copy /system/etc/usbconfig.sh /data/brcm/ase/scripts/usbconfig.sh
-
     chmod 0775 /data/brcm/ase/scripts/adb.sh
     chmod 0775 /data/brcm/ase/scripts/rndis.sh
     chmod 0775 /data/brcm/ase/scripts/logcfg.sh
@@ -85,7 +78,6 @@ on boot
 
 # DHCP service init:
     setprop wifi.interface "eth0"
-
     mkdir /system/etc/wifi 0770 wifi wifi
     chmod 0777 /system/etc/wifi
     chmod 0777 /system/etc/wifi/wpa_supplicant.conf
@@ -100,7 +92,6 @@ on boot
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
     chmod 0771 /data/misc/dhcp
-
     chmod 0777 /data/misc/wifi/wl
     chown wifi wifi /data/misc/wifi/wl
     chmod 0777 /data/misc/wifi/iperf
@@ -146,7 +137,6 @@ on boot
     chown gps system /sys/class/gpio/gpio56/direction
     write /sys/class/gpio/gpio56/value 0
     write /sys/class/gpio/gpio56/direction out
-
     write /sys/class/gpio/export 23
     chown gps system /sys/class/gpio/gpio23/value
     chown gps system /sys/class/gpio/gpio23/direction
@@ -158,17 +148,14 @@ on boot
 
 # For VT config:
     mkdir /data/vt 0775
-
     chmod 0775 /system/etc/vt/3g324mConfig.val
     chmod 0775 /system/etc/vt/testplay.3gp
     chmod 0775 /system/etc/vt/testplay.jpg
     chmod 0775 /system/etc/vt/testplay.bmp
-
     copy /system/etc/vt/3g324mConfig.val /data/vt/3g324mConfig.val
     copy /system/etc/vt/testplay.3gp /data/vt/testplay.3gp
     copy /system/etc/vt/testplay.jpg /data/vt/testplay.jpg
     copy /system/etc/vt/testplay.bmp /data/vt/testplay.bmp
-
     chmod 0775 /data/vt/3g324mConfig.val
     chmod 0775 /data/vt/testplay.3gp
     chmod 0775 /data/vt/testplay.jpg
@@ -196,8 +183,8 @@ service gpsd /system/bin/glgps -c /system/etc/gps/glconfig4751.xml
     user gps
     group system sdcard_rw inet
 
-# STOPSHIP: Remove logwrapper and -d option before production. Maybe next time:
-service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -d -n
+# Bluetooth service (has /system/bin/logwrapper and -d option):
+service bluetoothd /system/bin/bluetoothd -n
     socket bluetooth stream 660 bluetooth bluetooth
     socket dbus_bluetooth stream 660 bluetooth bluetooth
     group bluetooth net_bt_admin misc
@@ -235,7 +222,7 @@ service kexec /data/kexec.sh
 # USB port daemon:
 service console /system/bin/usb_portd
     console
-        user system
-        group vpn net_admin net_raw radio system log mount sdcard_rw
-        oneshot
+    user system
+    group vpn net_admin net_raw radio system log mount sdcard_rw
+    oneshot
 
