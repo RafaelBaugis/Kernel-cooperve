@@ -31,7 +31,7 @@ on boot
     chown system system /sys/bcm/cache
     chown system system /dev/ttyGS0
     chown system system /dev/ttyS0
-    chown root root /dev/frandom=
+    chown root root /dev/frandom
     chmod 0777 /dev/bcm_kril
     chmod 0777 /dev/bcm_vsp
     chmod 0660 /dev/bcm_atc
@@ -102,7 +102,7 @@ on boot
     chmod 0666 /data/misc/wifi/.nvmac.info
     chown wifi wifi /data/misc/wifi/.nvmac.info
 
-# wpa_supplicant socket (unix socket mode):
+# WPA supplicant mode:
     mkdir /data/system/wpa_supplicant 0771 wifi wifi
     chmod 0771 /data/system/wpa_supplicant
     chown wifi wifi /data/system/wpa_supplicant
@@ -172,7 +172,7 @@ service runSysCmd /system/bin/runSysCmd /data/misc/utils/setusbmode.txt 70
     oneshot
 
 # Make sure we startup btld before hcid:
-service btld /system/bin/logwrapper /system/bin/btld -hb 3000000 -hp /dev/ttyS1 -lpm 1 -nice -6
+service btld /system/bin/btld -hb 3000000 -hp /dev/ttyS1 -lpm 1 -nice -6
     user root
     group bluetooth net_bt_admin
     disabled
@@ -183,7 +183,7 @@ service gpsd /system/bin/glgps -c /system/etc/gps/glconfig4751.xml
     user gps
     group system sdcard_rw inet
 
-# Bluetooth service (has /system/bin/logwrapper and -d option):
+# Bluetooth service:
 service bluetoothd /system/bin/bluetoothd -n
     socket bluetooth stream 660 bluetooth bluetooth
     socket dbus_bluetooth stream 660 bluetooth bluetooth

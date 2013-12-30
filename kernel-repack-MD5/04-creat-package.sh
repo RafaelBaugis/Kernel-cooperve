@@ -2,11 +2,11 @@
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-OLD.sh
+./04-creat-package-RFS.sh
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-NEW.sh
+./04-creat-package-EXT4.sh
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*

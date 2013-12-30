@@ -1,15 +1,18 @@
 on early-init
+
+# Start uevent daemon:
     start ueventd
 
 on init
-    export PATH /sbin:/vendor/bin:/system/sbin:/system/bin:/system/xbin
-    export LD_LIBRARY_PATH /sbin/lib:/vendor/lib:/system/lib
+
+# Setup the global environment:
+    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /sbin/lib:/system/lib
     export ANDROID_ROOT /system
     export ANDROID_DATA /data
     export EXTERNAL_STORAGE /sdcard
 
-    #symlink /system/etc /etc
-
+# Create basic filesystem structure:
     mkdir /sdcard
     mkdir /sd-ext
     mkdir /system
@@ -19,42 +22,41 @@ on init
     mkdir /tmp
     mkdir /dbdata
     mkdir /mnt 0775 root root
-    #mount /tmp /tmp tmpfs
 
+# Install busybox in /sbin for essential commands:
     exec /sbin/busybox --install -s /sbin
 
+# Copy File Sytem Tables from ramdisk:
     exec /sbin/cp /res/recovery.fstab /etc/recovery.fstab
     exec /sbin/cp /res/fstab /etc/fstab
     exec /sbin/cp /res/mtab /etc/mtab
 
 on early-fs
-    # rfs drivers
+
+# FSR modules:
     insmod /lib/modules/fsr.ko
     insmod /lib/modules/fsr_stl.ko
+
+# RFS modules:
     insmod /lib/modules/rfs_glue.ko
     insmod /lib/modules/rfs_fat.ko
+
+# Sec Param module:
     insmod /lib/modules/sec_param.ko
 
 on fs
+
+# Mount /tmp:
     mount tmpfs tmpfs /tmp
 
-    exec /sbin/tune2fs -O ^has_journal /dev/stl9
-    exec /sbin/tune2fs -O ^has_journal /dev/stl10
-    exec /sbin/tune2fs -O ^has_journal /dev/stl11
-
-    exec /sbin/sleep 0.25
-
-    exec /sbin/e2fsck -p /dev/stl9
-    exec /sbin/e2fsck -p /dev/stl10
-    exec /sbin/e2fsck -p /dev/stl11
-
-    exec /sbin/sleep 0.25
-
-    mount ext4 /dev/stl9 /system
-    mount ext4 /dev/stl10 /cache nosuid nodev
-    mount ext4 /dev/stl11 /data nosuid nodev
+# Mount partitions:
+    mount rfs /dev/stl9 /system
+    mount rfs /dev/stl10 /cache nosuid nodev
+    mount rfs /dev/stl11 /data nosuid nodev
 
 on post-fs
+
+# Configure kernel:
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
@@ -65,24 +67,32 @@ on post-fs
     write /proc/LinuStoreIII/fsbuild_check BUILDING
 
 on boot
+
+# Configure network:
     ifup lo
     hostname localhost
     domainname localdomain
 
+# Start default services:
     class_start default
 
+# Unlock BML (for kernel flashing):
     exec /sbin/bmlunlock
 
     exec /sbin/recoverytweak.sh
 
+# uevent service daemon:
 service ueventd /sbin/ueventd
     critical
 
+# Console service:
 service console /sbin/sh
     console
 
+# Recovery service:
 service recovery /sbin/recovery
 
+# ADB service daemon:
 service adbd /sbin/adbd recovery
     disabled
 

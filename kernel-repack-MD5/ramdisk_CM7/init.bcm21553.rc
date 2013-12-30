@@ -1,19 +1,16 @@
 on post-fs
 
 # Permissions for system server and daemons (accelerometer & magnetic & proximity):
-
     chown root system /dev/proximity
     chown root system /dev/i2c-6
     chown system system /sys/class/input/input0/enable
     chown system system /sys/class/input/input0/poll_delay
-
     chmod 0660 /dev/proximity
     chmod 0660 /dev/i2c-6
     chmod 0660 /sys/class/input/input0/enable
-
+    chmod 0660 /sys/class/input/input0/poll_delay
     chmod 0660 /data/misc/sensors/ecs_nvm
     chmod 0660 /data/misc/sensors/accel_offset
-    chmod 0660 /sys/class/input/input0/poll_delay
 
 
 on boot
@@ -38,7 +35,6 @@ on boot
     chown system system /dev/ttyGS0
     chown system system /dev/ttyS0
     chown root root /dev/frandom
-
     chmod 0777 /dev/bcm_kril
     chmod 0777 /dev/bcm_vsp
     chmod 0660 /dev/bcm_atc
@@ -57,19 +53,16 @@ on boot
     mkdir /data/brcm/ase
     mkdir /data/brcm/ase/extras
     mkdir /data/brcm/ase/scripts
-
     chmod 0777 /data/brcm
     chmod 0777 /data/brcm/ase
     chmod 0777 /data/brcm/ase/extras
     chmod 0777 /data/brcm/ase/scripts
-
     copy /system/etc/adb.sh /data/brcm/ase/scripts/adb.sh
     copy /system/etc/rndis.sh /data/brcm/ase/scripts/rndis.sh
     copy /system/etc/logcfg.sh /data/brcm/ase/scripts/logcfg.sh
     copy /system/etc/modem.sh /data/brcm/ase/scripts/modem.sh
     copy /system/etc/atmode.sh /data/brcm/ase/scripts/atmode.sh
     copy /system/etc/usbconfig.sh /data/brcm/ase/scripts/usbconfig.sh
-
     chmod 0777 /data/brcm/ase/scripts/adb.sh
     chmod 0777 /data/brcm/ase/scripts/rndis.sh
     chmod 0777 /data/brcm/ase/scripts/logcfg.sh
@@ -91,7 +84,6 @@ on boot
 
 # DHCP service init:
     setprop wifi.interface "eth0"
-
     mkdir /system/etc/wifi 0770 wifi wifi
     chmod 0777 /system/etc/wifi
     chmod 0777 /system/etc/wifi/wpa_supplicant.conf
@@ -106,7 +98,6 @@ on boot
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
     chmod 0775 /data/misc/dhcp
-
     chmod 0777 /data/misc/wifi/wl
     chown wifi wifi /data/misc/wifi/wl
     chmod 0777 /data/misc/wifi/iperf
@@ -117,7 +108,7 @@ on boot
     chmod 0666 /data/misc/wifi/.nvmac.info
     chown wifi wifi /data/misc/wifi/.nvmac.info
 
-# wpa_supplicant socket (unix socket mode):
+# WPA supplicant mode:
     mkdir /data/system/wpa_supplicant 0771 wifi wifi
     chmod 0771 /data/system/wpa_supplicant
     chown wifi wifi /data/system/wpa_supplicant
@@ -158,7 +149,6 @@ on boot
     chown gps system /sys/class/gpio/gpio56/direction
     write /sys/class/gpio/gpio56/value 0
     write /sys/class/gpio/gpio56/direction out
-
     write /sys/class/gpio/export 23
     chown gps system /sys/class/gpio/gpio23/value
     chown gps system /sys/class/gpio/gpio23/direction
@@ -168,25 +158,22 @@ on boot
     chown gps system /dev/bcm_gps
     chown gps system /dev/bcm_cntin
 
-# For VT config:
-    mkdir /data/vt 0775
-
-    chmod 0775 /system/etc/vt/3g324mConfig.val
-    chmod 0775 /system/etc/vt/testplay.3gp
-    chmod 0775 /system/etc/vt/testplay.jpg
-    chmod 0775 /system/etc/vt/testplay.bmp
-
-    copy /system/etc/vt/3g324mConfig.val /data/vt/3g324mConfig.val
-    copy /system/etc/vt/testplay.3gp /data/vt/testplay.3gp
-    copy /system/etc/vt/testplay.jpg /data/vt/testplay.jpg
-    copy /system/etc/vt/testplay.bmp /data/vt/testplay.bmp
-
-    chmod 0775 /data/vt/3g324mConfig.val
-    chmod 0775 /data/vt/testplay.3gp
-    chmod 0775 /data/vt/testplay.jpg
-    chmod 0775 /data/vt/testplay.bmp
-    chmod 0775 /mnt/sdcard/vt
-    chmod 0775 /dev/pmem_adsp
+# For VT config (if problems uncomment):
+#    mkdir /data/vt 0775
+#    chmod 0775 /system/etc/vt/3g324mConfig.val
+#    chmod 0775 /system/etc/vt/testplay.3gp
+#    chmod 0775 /system/etc/vt/testplay.jpg
+#    chmod 0775 /system/etc/vt/testplay.bmp
+#    copy /system/etc/vt/3g324mConfig.val /data/vt/3g324mConfig.val
+#    copy /system/etc/vt/testplay.3gp /data/vt/testplay.3gp
+#    copy /system/etc/vt/testplay.jpg /data/vt/testplay.jpg
+#    copy /system/etc/vt/testplay.bmp /data/vt/testplay.bmp
+#    chmod 0775 /data/vt/3g324mConfig.val
+#    chmod 0775 /data/vt/testplay.3gp
+#    chmod 0775 /data/vt/testplay.jpg
+#    chmod 0775 /data/vt/testplay.bmp
+#    chmod 0775 /mnt/sdcard/vt
+#    chmod 0775 /dev/pmem_adsp
 
 # Rename apanic files with timestamp:
 service ap_log_ren /system/bin/sh /system/etc/apanic_rename.sh
@@ -197,14 +184,14 @@ service runSysCmd /system/bin/runSysCmd /data/misc/utils/setusbmode.txt 70
     oneshot
 
 # Make sure we startup btld before hcid:
-service btld /system/bin/logwrapper /system/bin/btld -hb 3000000 -hp /dev/ttyS1 -lpm 1 -nice -6
+service btld /system/bin/btld -hb 3000000 -hp /dev/ttyS1 -lpm 1 -nice -6
     user root
     group bluetooth net_bt_admin
     disabled
     oneshot
 
-# Bluetooth:
-service bluetoothd /system/bin/logwrapper /system/bin/bluetoothd -d -n
+# Bluetooth service:
+service bluetoothd /system/bin/bluetoothd -n
     socket bluetooth stream 660 bluetooth bluetooth
     socket dbus_bluetooth stream 660 bluetooth bluetooth
     group bluetooth net_bt_admin misc
@@ -241,7 +228,7 @@ service map /system/bin/sdptool add --channel=16 MAS
     disabled
     oneshot
 
-service hciattach /system/bin/logwrapper /system/bin/brcm_patchram_plus --bd_addr 4C0B3A2DF4B8 --enable_hci --tosleep 50000 --baudrate 3000000 --use_baudrate_for_download --i2s=1,1,0,1 --no2bytes --patchram /system/bin/BCM4330B1_002.001.003.0634.0652.hcd /dev/ttyS1
+service hciattach /system/bin/brcm_patchram_plus --bd_addr 4C0B3A2DF4B8 --enable_hci --tosleep 50000 --baudrate 3000000 --use_baudrate_for_download --i2s=1,1,0,1 --no2bytes --patchram /system/bin/BCM4330B1_002.001.003.0634.0652.hcd /dev/ttyS1
     user bluetooth
     group bluetooth net_bt_admin
     disabled

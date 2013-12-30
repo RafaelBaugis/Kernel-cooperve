@@ -20,13 +20,13 @@ if [ -f boot.img-ramdisk.cpio.gz ] || [ -f boot.img-ramdisk.cpio.lzma ] || [ -f 
 	test boot.img-ramdisk.cpio.lzma && echo "RAMDISK in cpio.lzma	- Good!"; touch r-ok
 else
 	rm -Rf ramdisk
-	ln -s ramdisk_OLD ramdisk
+	ln -s ramdisk_RFS ramdisk
 	if [ -d ramdisk ]; then
 		echo "CREATING RAMDISK";
 		./03-compress-ramdisk.lzma.sh
 		test boot.img-ramdisk.cpio.lzma && echo "RAMDISK	- OK"; touch r-ok
 	else
-		echo "Wont rave ramdisk files and folder!";
+		echo "Wont rave ramdisk files and fRFSer!";
 		sleep 5; exit
 	fi
 fi
@@ -66,14 +66,14 @@ if [ -f run.sh ] && [ -f md5 ]; then
 	rm ../kernel/boot.img ../boot.img ../*-boot.img.tar ../*-modules.zip ../*-boot.img.zip; clear; sleep 5
 	chmod +x run.sh mkbootimg && ./run.sh && rm run.sh md5
 	cd ..
-	tar -cvf OLD-PDA-boot.img.tar boot.img && mv boot.img kernel/ && cd kernel && zip -r ../OLD-boot.img.zip . ;
+	tar -cvf RFS-PDA-boot.img.tar boot.img && mv boot.img kernel/ && cd kernel && zip -r ../RFS-boot.img.zip . ;
 	cd ..
-	mv OLD-boot.img.zip ../$(cat ../common/.version)-OLD-boot.img.zip && echo "$(cat ../common/.version)-OLD-boot.img.zip <-> READY"
-	mv OLD-PDA-boot.img.tar ../$(cat ../common/.version)-OLD-PDA-boot.img.tar && echo "$(cat ../common/.version)-OLD-PDA-boot.img.tar <-> READY"
+	mv RFS-boot.img.zip ../$(cat ../common/.version)-RFS-boot.img.zip && echo "$(cat ../common/.version)-RFS-boot.img.zip <-> READY"
+	mv RFS-PDA-boot.img.tar ../$(cat ../common/.version)-RFS-PDA-boot.img.tar && echo "$(cat ../common/.version)-RFS-PDA-boot.img.tar <-> READY"
 else
 	echo "boot.img creation - Faill"; sleep 5; exit
 fi
 
-echo "OLD DONE";
+echo "RFS DONE";
 
 sleep 5

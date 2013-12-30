@@ -11,28 +11,37 @@ Features:
 - EXT4FS Cleancache support.
 - PROCFS autogroup scheduling support.
 - Reworked ramdisk.
-- Auto install su at boot (Version "1.86:SUPERSU").
+- Auto install su binary at boot (Version "1.86:SUPERSU").
 - Auto install busybox at boot (Version "1.21.1").
-- IPTables full needed rules (something to fix).
+- IPTables full needed rules (++somethin enabled :]).
 - zRAM + ramzswap support.
 - Swap support.
 - ClockworkMod Recovery 5.0.2.8 by Squadzone Rev3.
 - Frandom support.
+- Updated 3D kernel drivers (In antutu 2.6 jumped from 370 to 405 for 3D).
 
 Partition table:
+RFS:
+- /system	RFS	/dev/stl9
+- /cache	RFS	/dev/stl10
+- /data		RFS	/dev/stl11
+- /sdcard	VFAT	/dev/block/mmcblk0p1
+- /sd-ext	EXT3	/dev/block/mmcblk0p2
+EXT4:
 - /system	EXT4	/dev/stl9
 - /cache	EXT4	/dev/stl10
 - /data		EXT4	/dev/stl11
 - /sdcard	VFAT	/dev/block/mmcblk0p1
 - /sd-ext	EXT3	/dev/block/mmcblk0p2
+CM7: Right now the same as EXT4.
 
 Bugs:
 - SIM contacts reading (as everywhere).
 - Adobe Flash Player (Working: https://www.mediafire.com/?7fkbal3s0bszdb9)
 
 Editions (only difference is ramdisk [look: kernel-repack-MD5]):
-- OLD - Old ramdisk, stands as backup. Some features not present or are OLD.
-- NEW - New ramdisk, totally reworked. There are all changes (mainstream).
+- RFS - RFS FS booting (STOCK).
+- EXT - EXT4 FS booting (STOCK)
 - CM7 - New ramdisk with CM7 support (BETA [still problems ie. Bluetooth]).
 
 Frequencies:

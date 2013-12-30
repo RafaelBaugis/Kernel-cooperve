@@ -1,4 +1,6 @@
 on early-init
+
+# Start uevent daemon:
     start ueventd
 
 on init
@@ -46,11 +48,11 @@ loglevel 1
     mkdir /sqlite_stmt_journals 01777 root root
     mount tmpfs tmpfs /sqlite_stmt_journals size=4m
 
-
 # Filesystem image public mount points:
     mkdir /mnt/obb 0700 root system
     mount tmpfs tmpfs /mnt/obb mode=0755,gid=1000
 
+# Configure kernel:
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/kernel/hung_task_timeout_secs 0
     write /proc/cpu/alignment 4
@@ -81,19 +83,21 @@ loglevel 1
 # FSR module:
     insmod /lib/modules/fsr.ko
     insmod /lib/modules/fsr_stl.ko
+
 # RFS module:
     insmod /lib/modules/rfs_glue.ko
     insmod /lib/modules/rfs_fat.ko
 
 on fs
-# Add journaling:
+
+# Disable journaling for partitions:
     exec /sbin/tune2fs -O ^has_journal /dev/stl9
     exec /sbin/tune2fs -O ^has_journal /dev/stl10
     exec /sbin/tune2fs -O ^has_journal /dev/stl11
 
     exec /sbin/busybox sleep 0.25
 
-# Check FS for errors:
+# Check partitions for errors:
     exec /sbin/e2fsck -p /dev/stl9
     exec /sbin/e2fsck -p /dev/stl10
     exec /sbin/e2fsck -p /dev/stl11
@@ -106,19 +110,20 @@ on fs
     mount ext4 /dev/stl11 /data nosuid nodev nodelalloc
 
 on post-fs
-# Once everything is setup, no need to modify /
+
+# Remount / as Read-Only:
     mount rootfs rootfs / ro remount
 
-# We chown/chmod /data again so because mount is run as root + defaults
+# Permissions for /data:
     chown system system /data
     chmod 0771 /data
 
-# Create dump dir and collect dumps.
+# Dont panic:
     mkdir /data/dontpanic
     chown root log /data/dontpanic
     chmod 0750 /data/dontpanic
 
-# Collect apanic data, free resources and re-arm trigger:
+# Collect apanic data:
     copy /proc/apanic_console /data/dontpanic/apanic_console
     chown root log /data/dontpanic/apanic_console
     chmod 0640 /data/dontpanic/apanic_console
@@ -129,7 +134,7 @@ on post-fs
 
     write /proc/apanic_console 1
 
-# Same reason as /data above:
+# Permissions for /cache:
     chown system cache /cache
     chmod 0770 /cache
 
@@ -137,7 +142,7 @@ on post-fs
     chown system cache /cache/recovery
     chmod 0770 /cache/recovery
 
-# Permission for vmallocinfo to grab bugreports
+# Permissions for vmallocinfo to grab bugreports:
     chown root log /proc/vmallocinfo
     chmod 0440 /proc/vmallocinfo
 
@@ -156,14 +161,14 @@ on boot
     write /proc/sys/vm/min_free_order_shift 4
     write /sys/module/lowmemorykiller/parameters/minfree 2048,3072,4096,6144,7168,8192
 
-    # Set init its forked children's oom_adj:
+# Set init its forked children's oom_adj:
     write /proc/1/oom_adj -16
 
-    # Tweak background writeout:
+# Tweak background writeout:
     write /proc/sys/vm/dirty_expire_centisecs 200
     write /proc/sys/vm/dirty_background_ratio  5
 
-    # Permissions for System Server and daemons:
+# Permissions for System Server and daemons:
     chown radio system /sys/power/state
     chown radio system /sys/power/wake_lock
     chown radio system /sys/power/wake_unlock
@@ -175,10 +180,11 @@ on boot
 
     class_start default
 
-## Daemon processes to be run by init:
+# uevent service daemon:
 service ueventd /sbin/ueventd
     critical
 
+# Console service (if ro.secure=0):
 service console /sbin/busybox sh
     console
     disabled
@@ -192,7 +198,7 @@ service lpmkey /system/bin/charging_mode
     user root
     oneshot
 				
-# adbd is controlled by the persist.service.adb.enable system property:
+# ADB service daemon:
 service adbd /sbin/adbd
     user root
     oneshot

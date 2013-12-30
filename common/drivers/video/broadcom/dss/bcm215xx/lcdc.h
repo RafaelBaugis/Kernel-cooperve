@@ -93,7 +93,7 @@
 #elif defined(CONFIG_BCM_LCD_S6D05A1X31_COOPERVE)
 #include "../../displays/lcd_s6d05a1x31_cooperve.h"
 #else
-#include "../../displays/lcd_ili9341_boe_rev05.h"
+#include "../../displays/lcd_ili9341_rev05.h"
 #endif
 
 #ifdef CONFIG_CPU_FREQ_GOV_BCM21553
