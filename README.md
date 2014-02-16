@@ -21,18 +21,21 @@ Features:
 - Updated 3D kernel drivers (In antutu 2.6 jumped from 370 to 405 for 3D).
 
 Partition table:
+
 RFS:
 - /system	RFS	/dev/stl9
 - /cache	RFS	/dev/stl10
 - /data		RFS	/dev/stl11
 - /sdcard	VFAT	/dev/block/mmcblk0p1
 - /sd-ext	EXT3	/dev/block/mmcblk0p2
+
 EXT4:
 - /system	EXT4	/dev/stl9
 - /cache	EXT4	/dev/stl10
 - /data		EXT4	/dev/stl11
 - /sdcard	VFAT	/dev/block/mmcblk0p1
 - /sd-ext	EXT3	/dev/block/mmcblk0p2
+
 CM7: Right now the same as EXT4.
 
 Bugs:
