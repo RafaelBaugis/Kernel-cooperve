@@ -2,19 +2,15 @@
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-RFS.sh
+./04-STOCK-package-RFS.sh
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-EXT4.sh
+./04-STOCK-package-EXT4.sh
 rm -Rf kernel/boot.img
 rm -Rf ramdisk
 rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-CM7.sh
-rm -Rf kernel/boot.img
-rm -Rf ramdisk
-rm -Rf boot.img-ramdisk.cpio.*
-./04-creat-package-MODULES.sh
-echo "ALL DONE";
+./04-MODULES-package.sh
+echo "STOCK package DONE!";
 
 sleep 5

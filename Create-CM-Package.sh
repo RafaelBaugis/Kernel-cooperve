@@ -30,7 +30,7 @@ mv ./common/arch/arm/boot/zImage ./kernel-repack-MD5/zImage
 #fi
 
 if [ -f ./kernel-repack-MD5/zImage ] && [ "$(find ./kernel-repack-MD5/modules/system/lib/modules/ -name *.ko)" ]; then
-	cd kernel-repack-MD5 && ./04-creat-package.sh && cd ..
+	cd kernel-repack-MD5 && ./04-CM-package.sh && cd ..
 else
 	echo 'Error - Compile Fail!'; sleep 5; exit
 fi

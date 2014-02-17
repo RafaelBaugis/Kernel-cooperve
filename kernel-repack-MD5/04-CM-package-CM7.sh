@@ -23,7 +23,7 @@ else
 	ln -s ramdisk_CM7 ramdisk
 	if [ -d ramdisk ]; then
 		echo "CREATING RAMDISK";
-		./03-compress-ramdisk.lzma.sh
+		./03-enc-ramdisk.lzma.sh
 		test boot.img-ramdisk.cpio.lzma && echo "RAMDISK	- OK"; touch r-ok
 	else
 		echo "Wont rave ramdisk files and folder!";

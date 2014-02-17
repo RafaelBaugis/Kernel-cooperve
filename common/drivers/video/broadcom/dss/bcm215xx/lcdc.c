@@ -47,8 +47,15 @@ static struct cpufreq_client_desc *lcdc_client;
 /* globals to: communicate with the update thread */
 /*   control access to LCD registers */
 /*  manage DMA channel */
-static int gInitialized;
+int gInitialized;
 EXPORT_SYMBOL(gInitialized);
+
+#if 1	//COOPERVE_TEST
+struct class *lcd_class_manual_control;
+EXPORT_SYMBOL(lcd_class_manual_control);
+struct device *lcd_dev_manual_control;
+EXPORT_SYMBOL(lcd_dev_manual_control);
+#endif
 
 #ifdef CONFIG_HAS_WAKELOCK
 static struct wake_lock glcdfb_wake_lock;
@@ -69,7 +76,7 @@ static int lcd_release(struct inode *inode, struct file *file);
 void lcd_display_test(LCD_dev_info_t *dev);
 void lcd_display_rect(LCD_dev_info_t *dev, LCD_Rect_t *r);
 static void lcd_update_column(LCD_dev_info_t *dev, unsigned int column);
-static int lcd_pm_update(PM_CompPowerLevel compPowerLevel,
+int lcd_pm_update(PM_CompPowerLevel compPowerLevel,
 			 PM_PowerLevel sysPowerLevel);
 
 static void lcd_send_cmd_sequence(Lcd_init_t *init);
@@ -78,13 +85,16 @@ static inline void lcd_poweroff_panels(void);
 static void lcd_setup_for_data(LCD_dev_info_t *dev);
 static void lcd_csl_cb(CSL_LCD_RES_T, CSL_LCD_HANDLE, void*);
 
-#if defined(CONFIG_ENABLE_QVGA) || defined(CONFIG_ENABLE_HVGA) || defined(CONFIG_BOARD_ACAR)
+#if defined(CONFIG_ENABLE_QVGA) || defined(CONFIG_ENABLE_HVGA)
 void display_black_background(void);
 #endif
 
 static int __init lcdc_probe(struct platform_device *pdev);
 static int lcdc_remove(struct platform_device *pdev);
 
+#if 1	//COOPERVE_TEST
+static ssize_t lcd_manual_write_cmd(struct device *dev, struct device_attribute *attr, const char *buf,size_t size);
+#endif
 #ifdef CONFIG_BRCM_KPANIC_UI_IND
 int lcdc_disp_img(int img_index);
 #endif
@@ -97,6 +107,8 @@ EXPORT_SYMBOL(lcd_enable);
 
 #if defined(CONFIG_LCD_FRAME_INVERSION_DURING_CALL)
 uint8_t	lcd_frame_inversion_during_call = 0;
+uint8_t write_lcd_sequence_start_call = 0;
+uint8_t write_lcd_sequence_end_call = 0;
 #endif
 
 extern int bcm_gpio_pull_up(unsigned int gpio, bool up);
@@ -111,6 +123,9 @@ static CSL_LCDC_PAR_CTRL_T busCfg;
 
 #define ON  1
 #define OFF 0
+#if 1//COOPERVE_TEST
+static DEVICE_ATTR(lcdcmd, S_IRUGO | S_IWUSR | S_IWGRP, NULL, lcd_manual_write_cmd);
+#endif
 
 static struct workqueue_struct *lcd_wq;
 /****************************************************************************
@@ -281,6 +296,22 @@ uint32_t LCD_DRV_ID_Check(UInt8 reg, UInt8 num)
 ***************************************************************************/
 static void lcd_csl_cb(CSL_LCD_RES_T res, CSL_LCD_HANDLE handle, void *cbRef)
 {
+#if defined(CONFIG_LCD_FRAME_INVERSION_DURING_CALL)
+	if (write_lcd_sequence_start_call == 1)
+	{
+		printk("[LCD] %s, %d, Start Call\n", __func__, __LINE__);
+		lcd_send_cmd_sequence(enter_during_call_seq); /* during call */
+		write_lcd_sequence_start_call = 0;
+	}
+
+	if (write_lcd_sequence_end_call == 1)
+	{
+		printk("[LCD] %s, %d, End Call\n", __func__, __LINE__);
+		lcd_send_cmd_sequence(restore_during_call_seq); /* Idle */
+		write_lcd_sequence_end_call = 0;
+	}
+#endif
+	
 	up(&gDmaSema);
 	if ((CSL_LCD_OK != res)&&lcd_enable)
 		pr_info("lcd_csl_cb: res =%d\n", res);
@@ -477,7 +508,7 @@ static void lcd_send_data(uint16_t * p, int len, bool rle)
 					--rle_count;
 				}
 			} else {
-				for (i = 0; i < len; i++) {
+		for (i = 0; i < len; i++) {
 					lcd_write_data(*p >> 8);
 					lcd_write_data(*p++);
 				}
@@ -516,9 +547,9 @@ static void lcd_send_data(uint16_t * p, int len, bool rle)
 				}
 				lcd_write_data(pixel_data);
 				--rle_count;
-			}
-		} else {
-			for (i = 0; i < len; i++) {
+		}
+	} else {
+		for (i = 0; i < len; i++) {
 				pixel_data = *p++;
 				pixel_data |= (*p++ << 16);
 				lcd_write_data(pixel_data);
@@ -641,7 +672,7 @@ static void lcd_update_column(LCD_dev_info_t * dev, unsigned int column)
 		count &= ~1; /*Ignore one pixel in case count is odd*/
 		CSL_LCDC_Enable_RGB888U(handle, true);
 		for (i = 0; i < count; i++) {
-			p = (uint32_t *)source;
+ 			p = (uint32_t *)source;
 			lcd_write_data(*p);
 			source += stride;
 		}
@@ -787,6 +818,7 @@ static struct early_suspend lcd_early_suspend_esd = {
 	case PM_COMP_PWR_STANDBY:
 		{
 			pr_info("\n[%02d:%02d:%02d.%03lu] LCDC: Power off panel\n", tm.tm_hour, tm.tm_min, tm.tm_sec, ts.tv_nsec);
+                       gInitialized = 0;
 #ifdef CONFIG_REGULATOR
 			if (!IS_ERR_OR_NULL(lcdc_regulator))
 				regulator_disable(lcdc_regulator);
@@ -796,7 +828,6 @@ static struct early_suspend lcd_early_suspend_esd = {
 #ifdef CONFIG_CPU_FREQ_GOV_BCM21553
 			cpufreq_bcm_dvfs_enable(lcdc_client);
 #endif
-			gInitialized = 0;
 			break;
 		}
 	case PM_COMP_PWR_ON:
@@ -811,7 +842,7 @@ static struct early_suspend lcd_early_suspend_esd = {
 #endif
 			lcd_pwr_on_controll(ON);
 #if defined(CONFIG_ENABLE_QVGA) || defined(CONFIG_ENABLE_HVGA)
-//comment for bug194796			display_black_background();
+			display_black_background();
 #endif
 
 			lcd_init_panels();
@@ -840,7 +871,6 @@ static void lcd_esd_detect(struct work_struct *work)
 
       gpio_direction_output(LCD_DET, 1);    
 	printk("[LCD] lcd_esd_detect_enter\n");
-
       if(lcd_esd_ckeck==1){
 	printk("[LCD] %s, %d\n", __func__, __LINE__ );
 	lcd_poweroff_panels();              
@@ -868,13 +898,61 @@ static irqreturn_t lcd_esd_irq_handler(int irq, void *dev_id)
 
 	return IRQ_HANDLED;
 }
+// LCD color depth information
+static int lcd_color_depth_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	int count = 0;   
+	unsigned int color_depth = 0;
+#if defined(LCD_LDI_USED_COLOR_DEPTH)	//Support 24bit color depth
+	color_depth = LCD_LDI_USED_COLOR_DEPTH;
+	if(color_depth != 0)
+		count = sprintf(buf, "%d\n",color_depth);  //RGB888
+	else
+		count = sprintf(buf, "16\n");  //RGB565
+#else 
+	count = sprintf(buf, "18\n");			//RGB666
+#endif	
+	
+	return count;
+}
+// LCD color depth information
+static DEVICE_ATTR(lcd_color_depth, 0664, lcd_color_depth_show, NULL);
 
+#if 1	//COOPERVE_TEST
+static ssize_t lcd_manual_write_cmd(struct device *dev, struct device_attribute *attr, const char *buf,size_t size)
+{
+	char *after;
+	int ret;
+
+	unsigned long value = simple_strtoul(buf, &after, 10);	
+	printk(KERN_INFO "[LCD] %s, %d\n", __func__, __LINE__);
+
+	if(value==1)
+	{
+		memcpy(&timingReg , &timingRegForFMR , sizeof(CSL_LCDC_PAR_SPEED_t));
+		memcpy(&timingMem , &timingMemForFMR , sizeof(CSL_LCDC_PAR_SPEED_t));
+		printk(KERN_INFO "[LCD] timingReg %d,%d,%d\n",timingReg.wrHold,timingReg.wrPulse,timingReg.wrSetup);
+	}
+	else if(value==2)
+	{
+		memcpy(&timingReg , &timingRegOrg , sizeof(CSL_LCDC_PAR_SPEED_t));
+		memcpy(&timingMem , &timingMemOrg , sizeof(CSL_LCDC_PAR_SPEED_t));
+		printk(KERN_INFO "[LCD] timingReg %d,%d,%d\n",timingReg.wrHold,timingReg.wrPulse,timingReg.wrSetup);
+	}
+	else
+		return size;
+
+	return size;
+
+}
+#endif
 static int __init lcdc_probe(struct platform_device *pdev)
 {
 	int rc, i;
 	struct resource *res;
 	struct lcdc_platform_data_t *pdata;
 	CSL_LCD_RES_T ret;
+	int err = 0;
 
        lcd_enable=1;
 
@@ -905,6 +983,21 @@ static int __init lcdc_probe(struct platform_device *pdev)
 	pr_info("lcd:probe lcdc_base = 0x%x gpio = %d\n", (int)lcdc_base,
 		lcd_reset_gpio);
 
+	//Create LCD color depth information file
+	err = device_create_file(&(pdev->dev), &dev_attr_lcd_color_depth);
+	if (err < 0)
+		dev_err(&pdev->dev, "%s failed to add entries\n");
+#if 1	//COOPERVE_TEST
+	lcd_class_manual_control = class_create(THIS_MODULE, "lcd_dev");
+	if (IS_ERR(lcd_class_manual_control))
+		pr_err("[LCD] Failed to create class(lcd_dev)!\n");
+	lcd_dev_manual_control = device_create(lcd_class_manual_control, NULL, 0, NULL, "lcd_ctl");
+	if (IS_ERR(lcd_dev_manual_control))
+		pr_err("[LCD] Failed to create device(lcd_ctl)!\n");
+	if (device_create_file(lcd_dev_manual_control, &dev_attr_lcdcmd) < 0)
+		pr_err("[LCD] Failed to create device file(%s)!\n", dev_attr_lcdcmd.attr.name);
+#endif	
+		
 	/* Disable Tearing Effect control if the board doesn't support*/
 	if (!pdata->te_supported) {
 		pr_info("lcdc: Disabling te_support since the board doesn't support\n");
@@ -989,8 +1082,8 @@ static int __init lcdc_probe(struct platform_device *pdev)
 		pr_info("Tearing Effect control enabled\n");
 		busCfg.teCfg.type = LCDC_TE_CTRLR;
 		busCfg.teCfg.delay = 0;
-		busCfg.teCfg.pinSel = 0;
-		busCfg.teCfg.edgeRising = true;
+		busCfg.teCfg.pinSel = 0;		
+		busCfg.teCfg.edgeRising = false; //true; 
 	} else {
 		pr_info("Tearing Effect control disabled\n");
 		busCfg.teCfg.type = LCDC_TE_NONE;
@@ -1443,8 +1536,8 @@ static inline void lcd_init_panels(void)
 #if defined(CONFIG_BCM_LCD_S6D04H0A01) || defined(CONFIG_BCM_LCD_ILI9341_BOE) || defined(CONFIG_BCM_LCD_ILI9341_BOE_REV05) //TOTORO
     if(lcd_id==PANEL_BOE)
         lcd_send_cmd_sequence(power_on_seq_s6d04h0_boe);
-    else if(lcd_id==PANEL_SMD)
-	lcd_send_cmd_sequence(power_on_seq_s6d04h0_smd);
+    else
+	lcd_send_cmd_sequence(power_on_seq_s6d04k1_sdi);
 #elif defined(CONFIG_BCM_LCD_S6D04K1)//LUISA_HW00
 	lcd_send_cmd_sequence(power_on_seq_s6d04k1_sdi);
 #elif defined(CONFIG_BCM_LCD_S6D04K1_LUISA_HW02)
@@ -1468,6 +1561,8 @@ static inline void lcd_init_panels(void)
 		printk("[Caution] Unknown lcd (id: 0x%x )\r\n", lcd_id);	
 		lcd_send_cmd_sequence(power_on_seq_s5d05a1x31_cooperve_DTC);
 	}
+#else
+	lcd_send_cmd_sequence(power_on_seq_s6d04h0_boe);
 #endif
 
 }
@@ -1570,7 +1665,8 @@ void lcd_enter_during_call(void)
 {
 	printk("[LCD] %s, %d\n", __func__, __LINE__ );
 	lcd_frame_inversion_during_call = 1;
-	lcd_send_cmd_sequence(enter_during_call_seq);
+	//lcd_send_cmd_sequence(enter_during_call_seq);
+	write_lcd_sequence_start_call = 1;
 }
 EXPORT_SYMBOL(lcd_enter_during_call);
 
@@ -1578,8 +1674,9 @@ EXPORT_SYMBOL(lcd_enter_during_call);
 void lcd_restore_during_call(void)
 {
 	printk("[LCD] %s, %d\n", __func__, __LINE__ );
-	lcd_frame_inversion_during_call = 0;
-	lcd_send_cmd_sequence(restore_during_call_seq);
+	lcd_frame_inversion_during_call = 0;	
+	//lcd_send_cmd_sequence(restore_during_call_seq);
+	write_lcd_sequence_end_call = 1;
 }
 EXPORT_SYMBOL(lcd_restore_during_call);
 /* -- LCD frame inversion during call -- */

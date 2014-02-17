@@ -11,12 +11,12 @@ Features:
 - EXT4FS Cleancache support.
 - PROCFS autogroup scheduling support.
 - Reworked ramdisk.
-- Auto install su binary at boot (Version "1.86:SUPERSU").
+- Auto install su binary at boot (Version "1.93:SUPERSU").
 - Auto install busybox at boot (Version "1.21.1").
-- IPTables full needed rules (++somethin enabled :]).
+- IPTables full needed rules (DroidWall, WiFiKiller, etc works).
 - zRAM + ramzswap support.
 - Swap support.
-- ClockworkMod Recovery 5.0.2.8 by Squadzone Rev3.
+- ClockworkMod Recovery 5.0.2.8 by BroadcomCM.
 - Frandom support.
 - Updated 3D kernel drivers (In antutu 2.6 jumped from 370 to 405 for 3D).
 
@@ -85,9 +85,9 @@ Credits:
 Compiling:
 ============
 1. Download Sourcery from http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/
-(ARM Processors/EABI Release).
-2. Unpack it to home directory (~/)
+(arm-2009q3/ARM Processors/EABI Release).
+2. Unpack it to $HOME directory (~/)
 3. Clone this github.
-4. It seems logical (always use Compile-clean for stock or Compile-CM-clean for CM7 [everytime it will produce three packages but only desired version will be right], noclean for fast compiling [delete .o of modified files + built.in in modded folder).
-5. At the end files will be in ~/Ace-I-Kernel/* (tar for Odin, zip for CWM).
+4. It seems logical (always use Compile-STOCK-clean.sh for stock or Compile-CM-clean.sh for CM7 [everytime it will produce three packages but only desired version will be right], noclean for fast compiling [delete .o of modified files + built.in in modded folder).
+5. At the end files will be in ~/Ace-I-Kernel/*.zip & *.tar (tar for Odin, zip for CWM).
 6. Done!
