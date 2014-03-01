@@ -73,18 +73,18 @@ I/O schedulers:
 - sio
 - bfq
 
--
-
 Credits:
 - Rafael.Baugis for base kernel.
 - Bieltv3/Astinj (bieltv3 dropped source for Astinj?) for GitHub source.
 - and me :)
+
+-
 
 Compiling:
 1. Download Sourcery from http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/
 (arm-2009q3/ARM Processors/EABI Release).
 2. Unpack it to $HOME directory (~/)
 3. Clone this github.
-4. It seems logical (always use Compile-STOCK-clean.sh for stock or Compile-CM-clean.sh for CM7 [everytime it will produce three packages but only desired version will be right], noclean for fast compiling [delete .o of modified files + built.in in modded folder).
+4. It seems logical (always use Compile-STOCK-clean.sh for stock or Compile-CM-clean.sh for CM7, noclean for fast compiling [delete .o of modified files + built.in in modded folder).
 5. At the end files will be in ~/Ace-I-Kernel/*.zip & *.tar (tar for Odin, zip for CWM).
 6. Done!
