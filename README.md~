@@ -73,8 +73,6 @@ I/O schedulers:
 - sio
 - bfq
 
--
-
 Credits:
 - Rafael.Baugis for base kernel.
 - Bieltv3/Astinj (bieltv3 dropped source for Astinj?) for GitHub source.
