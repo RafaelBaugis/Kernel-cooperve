@@ -1,0 +1,101 @@
+on early-init
+
+# Start uevent daemon:
+    start ueventd
+
+on init
+
+# Setup the global environment:
+    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+
+# Backward compatibility:
+    symlink /system/etc /etc
+
+# Create basic filesystem structure:
+    mkdir /sdcard
+    mkdir /system
+    mkdir /data
+    mkdir /cache
+    mkdir /tmp
+    mkdir /dbdata
+    mkdir /mnt 0775 root root
+    mkdir /mnt/.lfs 0775 root root
+
+on early-fs
+
+# FSR modules:
+    insmod /lib/modules/fsr.ko
+    insmod /lib/modules/fsr_stl.ko
+
+# RFS modules:
+    insmod /lib/modules/rfs_glue.ko
+    insmod /lib/modules/rfs_fat.ko
+
+# Sec Param module:
+    insmod /lib/modules/sec_param.ko
+
+# J4FS module:
+    insmod /lib/modules/j4fs.ko
+
+on fs
+
+# Mount /tmp:
+    mount tmpfs tmpfs /tmp
+
+# Mount partitions:
+    mount ext4 /dev/stl9 /system nodelalloc
+    mount ext4 /dev/stl10 /cache nosuid nodev nodelalloc
+    mount ext4 /dev/stl11 /data nosuid nodev nodelalloc
+
+# Mount /mnt/.lfs:
+    mount j4fs /dev/stl6 /mnt/.lfs 
+
+# Permissions for /data:
+    chown system system /data
+    chmod 0771 /data  
+
+on post-fs
+
+# Configure kernel:
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+
+# Permissions for /cache:
+    chown system cache /cache
+    chmod 0770 /cache
+
+# Create /data/cache for files bigger than /cache partition:
+    mkdir /data/cache
+    chown system cache /data/cache
+    chmod 0770 /data/cache
+
+# Permissions for /cacche/recovery:
+    chown system cache /cache/recovery
+    chmod 0770 /cache/recovery
+
+on boot
+
+# Configure network:
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+# Start default services:
+    class_start default
+
+# Run uevent service daemon:
+service ueventd /sbin/ueventd
+    critical
+
+# Run FOTA service:
+service ua_launcher /sbin/ua_launcher
+    oneshot

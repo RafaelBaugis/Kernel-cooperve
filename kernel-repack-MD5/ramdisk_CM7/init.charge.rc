@@ -90,20 +90,6 @@ loglevel 1
 
 on fs
 
-# Disable journaling for partitions:
-    exec /sbin/tune2fs -O ^has_journal /dev/stl9
-    exec /sbin/tune2fs -O ^has_journal /dev/stl10
-    exec /sbin/tune2fs -O ^has_journal /dev/stl11
-
-    exec /sbin/busybox sleep 0.25
-
-# Check partitions for errors:
-    exec /sbin/e2fsck -p /dev/stl9
-    exec /sbin/e2fsck -p /dev/stl10
-    exec /sbin/e2fsck -p /dev/stl11
-
-    exec /sbin/busybox sleep 0.25
-
 # Mount partitions:
     mount ext4 /dev/stl9 /system nodelalloc
     mount ext4 /dev/stl10 /cache nosuid nodev nodelalloc

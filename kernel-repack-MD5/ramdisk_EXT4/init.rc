@@ -26,9 +26,9 @@ loglevel 3
     symlink /sys/kernel/debug /d
 
 # Copying File System Tables from ramdisk:
-    exec /sbin/busybox cp /res/recovery.fstab /etc/recovery.fstab
-    exec /sbin/busybox cp /res/fstab /etc/fstab
-    exec /sbin/busybox cp /res/mtab /etc/mtab
+    copy /res/recovery.fstab /etc/recovery.fstab
+    copy /res/fstab /etc/fstab
+    copy /res/mtab /etc/mtab
 
 # Create mountpoints:
     mkdir /mnt 0775 root system
@@ -127,18 +127,6 @@ loglevel 3
     chown radio system /dev/bml15
 
 on fs
-
-# Disable journaling for partitions:
-    exec /sbin/tune2fs -O ^has_journal /dev/stl9
-    exec /sbin/tune2fs -O ^has_journal /dev/stl10
-    exec /sbin/tune2fs -O ^has_journal /dev/stl11
-    exec /sbin/busybox sleep 0.25
-
-# Check partitions for errors:
-    exec /sbin/e2fsck -p /dev/stl9
-    exec /sbin/e2fsck -p /dev/stl10
-    exec /sbin/e2fsck -p /dev/stl11
-    exec /sbin/busybox sleep 0.25
 
 # Mount partitions:
     mount ext4 /dev/stl9 /system nodelalloc

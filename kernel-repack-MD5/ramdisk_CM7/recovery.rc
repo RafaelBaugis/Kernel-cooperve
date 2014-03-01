@@ -27,9 +27,9 @@ on init
     exec /sbin/busybox --install -s /sbin
 
 # Copy File Sytem Tables from ramdisk:
-    exec /sbin/cp /res/recovery.fstab /etc/recovery.fstab
-    exec /sbin/cp /res/fstab /etc/fstab
-    exec /sbin/cp /res/mtab /etc/mtab
+    copy /res/recovery.fstab /etc/recovery.fstab
+    copy /res/fstab /etc/fstab
+    copy /res/mtab /etc/mtab
 
 on early-fs
 
@@ -48,20 +48,6 @@ on fs
 
 # Mount /tmp:
     mount tmpfs tmpfs /tmp
-
-# Disable journaling for partitions:
-    exec /sbin/tune2fs -O ^has_journal /dev/stl9
-    exec /sbin/tune2fs -O ^has_journal /dev/stl10
-    exec /sbin/tune2fs -O ^has_journal /dev/stl11
-
-    exec /sbin/sleep 0.25
-
-# Check partitions for errors:
-    exec /sbin/e2fsck -p /dev/stl9
-    exec /sbin/e2fsck -p /dev/stl10
-    exec /sbin/e2fsck -p /dev/stl11
-
-    exec /sbin/sleep 0.25
 
 # Mount partitions:
     mount ext4 /dev/stl9 /system

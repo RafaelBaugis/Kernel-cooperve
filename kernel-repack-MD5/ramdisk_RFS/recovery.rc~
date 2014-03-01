@@ -1,0 +1,103 @@
+on early-init
+
+# Start uevent daemon:
+    start ueventd
+
+on init
+
+# Setup the global environment:
+    export PATH /sbin:/system/sbin:/system/bin:/system/xbin
+    export LD_LIBRARY_PATH /sbin/lib:/system/lib
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+
+# Create basic filesystem structure:
+    mkdir /sdcard
+    mkdir /sd-ext
+    mkdir /system
+    mkdir /etc
+    mkdir /data
+    mkdir /cache
+    mkdir /tmp
+    mkdir /dbdata
+    mkdir /mnt 0775 root root
+
+# Install busybox in /sbin for essential commands:
+    exec /sbin/busybox --install -s /sbin
+
+# Copy File Sytem Tables from ramdisk:
+    exec /sbin/cp /res/recovery.fstab /etc/recovery.fstab
+    exec /sbin/cp /res/fstab /etc/fstab
+    exec /sbin/cp /res/mtab /etc/mtab
+
+on early-fs
+
+# FSR modules:
+    insmod /lib/modules/fsr.ko
+    insmod /lib/modules/fsr_stl.ko
+
+# RFS modules:
+    insmod /lib/modules/rfs_glue.ko
+    insmod /lib/modules/rfs_fat.ko
+
+# Sec Param module:
+    insmod /lib/modules/sec_param.ko
+
+on fs
+
+# Mount /tmp:
+    mount tmpfs tmpfs /tmp
+
+# Mount partitions:
+    mount rfs /dev/stl9 /system
+    mount rfs /dev/stl10 /cache nosuid nodev
+    mount rfs /dev/stl11 /data nosuid nodev
+
+on post-fs
+
+# Configure kernel:
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/kernel/hung_task_timeout_secs 0
+    write /proc/cpu/alignment 4
+    write /proc/sys/kernel/sched_latency_ns 10000000
+    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
+    write /proc/sys/kernel/sched_compat_yield 1
+    write /proc/sys/kernel/sched_child_runs_first 0
+    write /proc/LinuStoreIII/fsbuild_check BUILDING
+
+on boot
+
+# Configure network:
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+# Start default services:
+    class_start default
+
+# Unlock BML (for kernel flashing):
+    exec /sbin/bmlunlock
+
+    exec /sbin/recoverytweak.sh
+
+# uevent service daemon:
+service ueventd /sbin/ueventd
+    critical
+
+# Console service:
+service console /sbin/sh
+    console
+
+# Recovery service:
+service recovery /sbin/recovery
+
+# ADB service daemon:
+service adbd /sbin/adbd recovery
+    disabled
+
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    stop adbd

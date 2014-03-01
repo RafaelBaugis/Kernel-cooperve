@@ -27,9 +27,9 @@ on init
     exec /sbin/busybox --install -s /sbin
 
 # Copy File Sytem Tables from ramdisk:
-    exec /sbin/cp /res/recovery.fstab /etc/recovery.fstab
-    exec /sbin/cp /res/fstab /etc/fstab
-    exec /sbin/cp /res/mtab /etc/mtab
+    copy /res/recovery.fstab /etc/recovery.fstab
+    copy /res/fstab /etc/fstab
+    copy /res/mtab /etc/mtab
 
 on early-fs
 
