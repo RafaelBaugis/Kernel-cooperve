@@ -1,0 +1,13 @@
+Files used to add freqs in bcm-21553:
+
+arch/arm/mach-bcm215xx/clock-21553.c
+arch/arm/mach-bcm215xx/device.c
+arch/arm/mach-bcm215xx/include/mach/bcm21553_cpufreq_gov.h
+arch/arm/plat-bcmap/include/plat/bcm_avs.h
+---------------------
+Files used to add govs in bcm-21553:
+
+drivers/cpufreq/cpufreq_govname.c
+drivers/cpufreq/Makefile
+drivers/cpufreq/Kconfig
+arch/arm/configs/**ourconfig**

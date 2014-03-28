@@ -1,12 +1,15 @@
-mount("rfs", "EMMC", "/dev/stl9", "/system");
+ui_print("=======================");
+ui_print("Ace-I-Kernel by Devloz");
+ui_print("# Modules installer");
+ui_print("=======================");
+ui_print("Mount partitions...");
 mount("ext4", "EMMC", "/dev/stl9", "/system");
-
-ui_print("Installing Files");
-
+mount("rfs", "EMMC", "/dev/stl9", "/system");
+ui_print("Installing Modules...");
 package_extract_dir("system", "/system");
-
-set_perm_recursive(0, 0, 0755, 0754, "/system/etc/init.d");
-
+ui_print("Setting permissions...");
+set_perm_recursive(0, 0, 0755, 0755, "/system/etc/init.d");
 set_perm_recursive(0, 0, 0755, 0644, "/system/lib/modules");
-	 
-ui_print("DONE !!!");
+ui_print("=======================");
+ui_print("Done!");
+ui_print("=======================");

@@ -1,0 +1,7 @@
+# MountPoint    FS-1    DEV-1                   DEV-2   FS-2    FS-Opt-1    FS-Opt-2
+/boot           bml     /dev/block/bml7
+/system         rfs     /dev/block/stl9         NULL    NULL    NULL        rw,check=no
+/cache          rfs     /dev/block/stl10        NULL    NULL    NULL        rw,nosuid,nodev,check=no
+/data           rfs     /dev/block/stl11        NULL    NULL    NULL        rw,nosuid,nodev,check=no
+/sdcard         vfat    /dev/block/mmcblk0p1
+/sd-ext         ext3    /dev/block/mmcblk0p2    NULL    auto    NULL        rw,nosuid,nodev,check=no

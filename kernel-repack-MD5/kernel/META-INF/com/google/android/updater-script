@@ -1,16 +1,16 @@
-ui_print("Preparing for flashing Boot Image..");
-
-# copying files in ramdisk
+ui_print("=======================");
+ui_print("Ace-I-Kernel by Devloz");
+ui_print("# Kernel installer");
+ui_print("=======================");
+ui_print("Preparing to install...");
 package_extract_file("busybox", "busybox");
 package_extract_file("bmlunlock", "bmlunlock");
 package_extract_file("boot.img", "boot.img");
 set_perm(0, 0, 0755, "bmlunlock");
 set_perm(0, 0, 0755, "busybox");
-
-ui_print("Flashing Boot.img");
-
-# flashing
+ui_print("Installing Ace-I-Kernel...");
 run_program("bmlunlock");
 run_program("busybox", "dd", "if=boot.img", "of=/dev/block/bml7");
-
-ui_print("DONE !!!");
+ui_print("=======================");
+ui_print("Done!");
+ui_print("=======================");

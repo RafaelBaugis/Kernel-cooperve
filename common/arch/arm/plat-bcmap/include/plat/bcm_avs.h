@@ -50,6 +50,9 @@ struct silicon_type_info
 	/* NM2 turbo mode voltage. Pass -1 if no update needed */
 	int nm2_normal_voltage;
 	int nm2_slow_voltage;
+	int nm2_slower_voltage;
+	int nm2_slower2_voltage;
+	int nm2_slowest_voltage;
 };
 
 struct bcm_avs_platform_data_t

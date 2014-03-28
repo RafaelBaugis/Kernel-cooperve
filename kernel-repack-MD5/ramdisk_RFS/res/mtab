@@ -1,0 +1,5 @@
+/dev/stl10              /cache     rfs     rw
+/dev/stl11              /data      rfs     rw
+/dev/stl9               /system    rfs     rw
+/dev/block/mmcblk0p1    /sdcard    vfat    rw
+/dev/block/mmcblk0p2    /sd-ext    ext3    rw

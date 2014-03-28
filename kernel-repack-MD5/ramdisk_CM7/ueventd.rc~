@@ -1,0 +1,47 @@
+# Giving rw-rw-rw- permissions for devices:
+/dev/null                 0666   root       root
+/dev/zero                 0666   root       root
+/dev/full                 0666   root       root
+/dev/ptmx                 0666   root       root
+/dev/tty                  0666   root       root
+/dev/random               0666   root       root
+/dev/urandom              0666   root       root
+/dev/frandom              0666   root       root
+/dev/erandom              0666   root       root
+/dev/ashmem               0666   root       root
+/dev/binder               0666   root       root
+
+# Giving rw-rw--w- permission for devices:
+/dev/log/*                0662   root       log
+
+# Giving rw-rw---- permissions for devices:
+/dev/android_adb          0660   adb        adb
+/dev/android_adb_enable   0660   adb        adb
+/dev/uinput               0660   system     bluetooth
+/dev/alarm                0664   system     radio
+/dev/tty0                 0660   root       system
+/dev/graphics/*           0660   root       graphics
+/dev/input/*              0660   root       input
+/dev/pmem_adsp            0660   system     audio
+/dev/snd/*                0660   system     audio
+/dev/i2c-2                0660   root       system
+/dev/i2c-4                0660   root       system
+/dev/smd0                 0640   radio      radio
+
+# Giving rw-rw---- permissions for input devices:
+/sys/devices/virtual/input/input*   enable      0660  root   input
+/sys/devices/virtual/input/input*   poll_delay  0660  root   input
+
+# Giving rw-rw---- permissions for DP RAM devices:
+/dev/dpram0               0660   radio      radio
+/dev/dpram1               0660   radio      radio
+/dev/dpramerr             0660   radio      radio
+
+# Giving rw-rw---- permission for Multi PDP device:
+/dev/multipdp             0660   radio      radio
+
+# Console permissions:
+/dev/ttyCSD0              0660   radio      radio
+/dev/ttySMD0              0660   radio      radio
+/dev/ttyGPS0              0660   system     system
+/dev/ttyXTRA0             0660   system     system
